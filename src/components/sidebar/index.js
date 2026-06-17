@@ -1,15 +1,9 @@
 'use client'
 import React from 'react'
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import styles from './sidebar.module.scss';
 import DashboardIcon from '@/svg/dashboardIcon';
-import PartenerIcon from '@/svg/partenerIcon';
-import TradesIcon from '@/svg/tradesIcon';
-import TransactionsIcon from '@/svg/transactionsIcon';
-import MyClientsIcon from '@/svg/myClientsIcon';
-import ProfitSharingIcon from '@/svg/profitSharingIcon';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
-import UserIcon from '@/svg/userIcon';
 import UserGroupIcon from '@/svg/userGroupIcon';
 import CommissionIcon from '@/svg/commissionIcon';
 import WithdrawIcon from '@/svg/withdrawIcon';
@@ -18,29 +12,24 @@ import KycIcon from '@/svg/kycIcon';
 import CheckboxIcon from '@/svg/checkboxIcon';
 import AdminIcon from '@/svg/adminIcon';
 import SettingIcon from '@/svg/settingIcon';
+
 const Logo = '/assets/logo/logo.svg';
 
 export default function Sidebar() {
-  const [isPartnerOpen, setIsPartnerOpen] = useState(true);
+  const pathname = usePathname();
 
-  const dropdownVariants = {
-    open: {
-      height: 'auto',
-      opacity: 1,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut"
-      }
-    },
-    closed: {
-      height: 0,
-      opacity: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut"
-      }
-    }
-  };
+  const menuItems = [
+    { label: 'Dashboard', path: '/dashboard', Icon: DashboardIcon },
+    { label: 'Users', path: '/users', Icon: UserGroupIcon },
+    { label: 'Commission', path: '/commission', Icon: CommissionIcon },
+    { label: 'Withdraw Requests', path: '/withdraw-requests', Icon: WithdrawIcon },
+    { label: 'Deposits', path: '/deposits', Icon: WithdrawIcon },
+    { label: 'DP Requests', path: '/dp-requests', Icon: RequestIcon },
+    { label: 'KYC Requests', path: '/kyc-requests', Icon: KycIcon },
+    { label: 'Send Notifications', path: '/send-notifications', Icon: CheckboxIcon },
+    { label: 'Sub-Admins', path: '/sub-admins', Icon: AdminIcon },
+    { label: 'Settings', path: '/settings', Icon: SettingIcon },
+  ];
 
   return (
     <aside className={styles.aside}>
@@ -48,67 +37,22 @@ export default function Sidebar() {
         <img src={Logo} alt='Logo' />
       </div>
       <div className={styles.asideBody}>
-        <div className={styles.menu}>
-          <DashboardIcon />
-          <span>
-            Dashboard
-          </span>
-        </div>
-        <div className={styles.menu}>
-          <UserGroupIcon />
-          <span>
-            Users
-          </span>
-        </div>
-        <div className={styles.menu}>
-          <CommissionIcon />
-          <span>
-            Commission
-          </span>
-        </div>
-        <div className={styles.menu}>
-          <WithdrawIcon />
-          <span>
-            Withdraw Requests
-          </span>
-        </div>
-        <div className={styles.menu}>
-          <WithdrawIcon />
-          <span>
-            Deposits
-          </span>
-        </div>
-        <div className={styles.menu}>
-          <RequestIcon />
-          <span>
-            DP Requests
-          </span>
-        </div>
-        <div className={styles.menu}>
-          <KycIcon />
-          <span>
-            KYC Requests
-          </span>
-        </div>
-        <div className={styles.menu}>
-          <CheckboxIcon />
-          <span>
-            Send Notifications
-          </span>
-        </div>
-        <div className={styles.menu}>
-          <AdminIcon />
-          <span>
-            Sub-Admins
-          </span>
-        </div>
-        <div className={styles.menu}>
-          <SettingIcon />
-          <span>
-            Settings
-          </span>
-        </div>
-
+        {menuItems.map((item) => {
+          const Icon = item.Icon;
+          const isActive = pathname === item.path;
+          return (
+            <Link 
+              key={item.path} 
+              href={item.path} 
+              className={`${styles.menu} ${isActive ? styles.activeMenu : ''}`}
+            >
+              <Icon />
+              <span>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </aside>
   )

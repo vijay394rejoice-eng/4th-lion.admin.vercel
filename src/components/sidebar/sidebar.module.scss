@@ -68,10 +68,20 @@
         }
 
         .activeMenu {
+            background: linear-gradient(90deg, rgba(66, 133, 244, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%);
+
+            &::before {
+                height: 100%;
+            }
+
             svg {
                 path {
                     stroke: #1C61BA;
                 }
+            }
+
+            span {
+                color: #1C61BA !important;
             }
         }
 

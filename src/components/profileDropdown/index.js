@@ -1,5 +1,7 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './profileDropdown.module.scss';
 import UserIcon from '@/svg/userIcon';
@@ -9,6 +11,7 @@ import LogoutIcon from '@/svg/logoutIcon';
 import ChevronRightIcon from '@/svg/chevronRightIcon';
 
 export default function ProfileDropdown() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -51,8 +54,12 @@ export default function ProfileDropdown() {
       label: 'Logout',
       icon: <LogoutIcon />,
       onClick: () => {
-        console.log('Logout Clicked');
+        // Clear access_token and refresh_token cookies by setting their expiration date to the past
+        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        toast.success('Logged out successfully');
         setIsOpen(false);
+        router.push('/');
       }
     }
   ];

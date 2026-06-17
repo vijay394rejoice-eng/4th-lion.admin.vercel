@@ -32,6 +32,16 @@
                 gap: 12px;
                 padding: 0 0 50px 0;
             }
+
+            .errorText {
+                color: #e11d48;
+                font-size: 12px;
+                font-weight: 500;
+                margin-top: -4px;
+                margin-bottom: 4px;
+                display: block;
+                text-align: left;
+            }
         }
     }
 }
