@@ -1,0 +1,31 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.button {
+    &.outline {
+        button {
+            border: 1px solid #141414;
+            background-color: transparent;
+            color: #141414;
+            background: transparent;
+        }
+    }
+
+    button {
+        border-radius: 8px;
+        background: var(--Yellow, #FBD242);
+        padding: 12px;
+        width: 100%;
+        border: 1px solid #FBD242;
+        color: var(--Text-Primary, #141414);
+        font-size: 16px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        line-height: normal;
+
+    }
+}

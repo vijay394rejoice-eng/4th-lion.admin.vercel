@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+input,
+textarea,
+::placeholder,
+button {
+  font-family: var(--font-plus-jakarta);
+}
+
+.heading {
+  font-family: var(--font-montserrat);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+p:last-child {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.flex-box {
+  background: #EEF5FF;
+  display: flex;
+}
+
+.sidebar-layout {
+  width: 274px;
+}
+
+.children-layout {
+  width: calc(100% - 274px);
+}
+
+.children-layout-spacing {
+  padding: 14px;
+}

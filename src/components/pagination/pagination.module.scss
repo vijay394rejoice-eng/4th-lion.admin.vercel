@@ -1,0 +1,99 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F1F5F9;
+    border-radius: 12px;
+    padding: 20px 0 0 0;
+    font-family: var(--font-manrope);
+
+    .leftSection {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .arrowBtn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--Text-Secondary, #555);
+            transition: 0.2s;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.05);
+                border-radius: 8px;
+            }
+        }
+
+        .pageNumber {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--Text-Secondary, #555);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: 0.2s;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.05);
+            }
+
+            &.active {
+                background: #FBD242;
+                color: #141414;
+                font-weight: 700;
+            }
+        }
+
+        .dots {
+            color: var(--Text-Secondary, #555);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 0 4px;
+        }
+    }
+
+    .rightSection {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        span {
+            color: var(--Text-Secondary, #555);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .gotoInput {
+            width: 40px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: #E2E8F0;
+            color: var(--Text-Primary, #141414);
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            outline: none;
+            font-family: var(--font-manrope);
+
+            &:focus {
+                background: #CBD5E1;
+            }
+        }
+    }
+}

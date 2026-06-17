@@ -1,0 +1,177 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.aside {
+    border-right: 1px solid rgba(0, 0, 0, 0.10);
+    background: #FFF;
+    height: 100dvh;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    .logo {
+        padding: 15px 20px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+
+        img {
+            max-width: 146px;
+        }
+    }
+
+    .asideBody {
+        padding: 10px 0;
+        height: calc(100dvh - 75px);
+        overflow: auto;
+
+        .menu {
+            position: relative;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: .3s ease-in-out;
+
+            &:hover {
+                background: linear-gradient(90deg, rgba(66, 133, 244, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%);
+
+                &::before {
+                    height: 100%;
+                }
+
+                svg {
+                    path {
+                        stroke: #1C61BA;
+                    }
+                }
+            }
+
+            &::before {
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: 0%;
+                transition: .3s ease-in-out;
+                content: '';
+                width: 3px;
+                background-color: #1C61BA;
+            }
+
+            span {
+                display: block;
+                color: var(--Text-Secondary, #555);
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 100%;
+                letter-spacing: -0.154px;
+            }
+        }
+
+        .activeMenu {
+            svg {
+                path {
+                    stroke: #1C61BA;
+                }
+            }
+        }
+
+        .dropdownContainer {
+            width: 100%;
+
+            .dropdownMenu {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+
+                .dropdownLine {
+                    position: absolute;
+                    left: 29px;
+                    top: -16px;
+                    bottom: 24px;
+                    width: 1px;
+                    background-color: rgba(0, 0, 0, 0.2);
+                    z-index: 1;
+                }
+
+                .dropdownItem {
+                    position: relative;
+                    padding: 16px 20px 16px 52px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    cursor: pointer;
+                    transition: .3s ease-in-out;
+                    background: transparent;
+
+                    &::before {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        height: 0%;
+                        transition: .3s ease-in-out;
+                        content: '';
+                        width: 3px;
+                        background-color: #1C61BA;
+                    }
+
+                    &:hover {
+                        background: linear-gradient(90deg, rgba(66, 133, 244, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%);
+
+                        span {
+                            color: #1C61BA;
+                        }
+
+                        svg path,
+                        svg circle {
+                            stroke: #1C61BA;
+                        }
+                    }
+
+                    .connector {
+                        position: absolute;
+                        left: 29px;
+                        top: 50%;
+                        width: 23px;
+                        height: 1px;
+                        background-color: rgba(0, 0, 0, 0.2);
+                        z-index: 1;
+                    }
+
+                    span {
+                        color: var(--Text-Secondary, #555);
+                        font-size: 14px;
+                        font-weight: 600;
+                        line-height: 100%;
+                    }
+
+                    .activeText {
+                        color: #000;
+                        font-weight: 700;
+                    }
+
+                    svg {
+                        z-index: 2;
+                    }
+                }
+
+                .activeItem {
+                    background: linear-gradient(90deg, rgba(66, 133, 244, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%);
+
+                    &::before {
+                        height: 100%;
+                    }
+
+                    svg path,
+                    svg circle {
+                        stroke: #1C61BA;
+                    }
+
+                    span {
+                        color: #000;
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
+    }
+}

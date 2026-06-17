@@ -1,0 +1,15 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.modalHeader {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    padding: 32px;
+
+    h2 {
+        color: var(--Text-Primary, #141414);
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 110%;
+        text-align: center;
+    }
+}

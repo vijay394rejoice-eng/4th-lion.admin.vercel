@@ -1,0 +1,29 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.authTitle {
+    padding: 0 0 20px 0;
+
+    .centerLogo {
+        display: flex;
+        padding: 0 0 30px 0;
+        justify-content: center;
+
+        img {
+            display: block;
+            cursor: pointer;
+            max-width: 219px;
+        }
+    }
+
+
+    h1 {
+        color: #141414;
+        font-size: 24px;
+        text-align: center;
+        font-weight: 700;
+        font-family: var(--font-montserrat);
+        line-height: 110%;
+    }
+
+}

@@ -1,0 +1,50 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    background: #FFF;
+    padding: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+
+    .title {
+        h2 {
+            color: var(--Text-Primary, #141414);
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 100%;
+            letter-spacing: -0.22px;
+        }
+    }
+
+    .rightAlignment {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+
+        .user {
+            width: 48px;
+            height: 48px;
+            border-radius: 50px;
+            background: var(--Yellow, #FBD242);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .bellIcon {
+            display: flex;
+            align-items: center;
+
+            svg {
+                cursor: pointer;
+            }
+        }
+    }
+}
