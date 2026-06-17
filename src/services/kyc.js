@@ -4,3 +4,9 @@ import { api, request } from './api';
 
 export const getKYCRequests = (params) =>
   request(() => api.get('/admin-kyc', { params }));
+
+export const approveKYC = (requestId, payload) =>
+  request(() => api.post(`/admin-kyc/${requestId}/approve`, payload));
+
+export const rejectKYC = (requestId, payload) =>
+  request(() => api.post(`/admin-kyc/${requestId}/reject`, payload));

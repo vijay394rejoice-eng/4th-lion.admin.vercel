@@ -1,19 +1,53 @@
-import React from 'react'
+"use client";
+import React, { useState } from 'react';
 import styles from './kycPreview.module.scss';
 import Button from '../button';
+import Input from '../input';
+
 const ProofImage = '/assets/images/proof.png';
 const RightIcon = 'assets/icons/right.svg';
 const Close = 'assets/icons/close.svg';
-export default function KycPreview() {
+
+export default function KycPreview({ request, onClose, onApprove, onReject, isSubmitting }) {
+    const [remarks, setRemarks] = useState('');
+
+    if (!request) return null;
+
+    // Helper to extract image URL for category & side
+    const getDocUrl = (category, side) => {
+        const doc = request.documents?.find(
+            d => d.document_category === category && d.document_side === side
+        );
+        return doc ? doc.file_url : ProofImage;
+    };
+
+    const displayName = request.first_name || request.last_name 
+        ? `${request.first_name || ''} ${request.last_name || ''}`.trim()
+        : `User: ${request.user_id?.substring(0, 8)}...`;
+    
+    const displayEmail = request.email || `Role: ${request.role}`;
+
+    const handleApproveClick = () => {
+        if (onApprove) {
+            onApprove(request.id, remarks);
+        }
+    };
+
+    const handleRejectClick = () => {
+        if (onReject) {
+            onReject(request.id, remarks);
+        }
+    };
+
     return (
-        <div className={styles.kycPreview}>
-            <div className={styles.modal}>
+        <div className={styles.kycPreview} onClick={onClose}>
+            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalheader}>
                     <h2>
-                        Mark Twain
+                        {displayName}
                     </h2>
                     <p>
-                        mail@mail.com
+                        {displayEmail}
                     </p>
                 </div>
                 <div className={styles.modalBody}>
@@ -22,32 +56,62 @@ export default function KycPreview() {
                             <p>
                                 ID Proof (Front)
                             </p>
-                            <img src={ProofImage} alt='ProofImage' />
+                            <a href={getDocUrl('IDENTITY_PROOF', 'FRONT')} target="_blank" rel="noopener noreferrer">
+                                <img src={getDocUrl('IDENTITY_PROOF', 'FRONT')} alt='ID Proof Front' />
+                            </a>
                         </div>
                         <div>
                             <p>
-                                ID Proof (Front)
+                                ID Proof (Back)
                             </p>
-                            <img src={ProofImage} alt='ProofImage' />
+                            <a href={getDocUrl('IDENTITY_PROOF', 'BACK')} target="_blank" rel="noopener noreferrer">
+                                <img src={getDocUrl('IDENTITY_PROOF', 'BACK')} alt='ID Proof Back' />
+                            </a>
                         </div>
                     </div>
                     <div className={styles.twoCol}>
                         <div>
                             <p>
-                                ID Proof (Front)
+                                Address Proof (Front)
                             </p>
-                            <img src={ProofImage} alt='ProofImage' />
+                            <a href={getDocUrl('ADDRESS_PROOF', 'FRONT')} target="_blank" rel="noopener noreferrer">
+                                <img src={getDocUrl('ADDRESS_PROOF', 'FRONT')} alt='Address Proof Front' />
+                            </a>
                         </div>
                         <div>
                             <p>
-                                ID Proof (Front)
+                                Address Proof (Back)
                             </p>
-                            <img src={ProofImage} alt='ProofImage' />
+                            <a href={getDocUrl('ADDRESS_PROOF', 'BACK')} target="_blank" rel="noopener noreferrer">
+                                <img src={getDocUrl('ADDRESS_PROOF', 'BACK')} alt='Address Proof Back' />
+                            </a>
                         </div>
                     </div>
+                    
+                    <div style={{ marginBottom: '24px' }}>
+                        <Input 
+                            label="Remarks"
+                            placeholder="Enter approval/rejection remarks..."
+                            value={remarks}
+                            onChange={(e) => setRemarks(e.target.value)}
+                            disabled={isSubmitting}
+                        />
+                    </div>
+
                     <div className={styles.buttonGrid}>
-                        <Button icon={RightIcon} text="Approve KYC " />
-                        <Button icon={Close} text="Reject KYC" primaryOutline />
+                        <Button 
+                            icon={RightIcon} 
+                            text={isSubmitting ? "Approving..." : "Approve KYC"} 
+                            onClick={handleApproveClick}
+                            disabled={isSubmitting}
+                        />
+                        <Button 
+                            icon={Close} 
+                            text={isSubmitting ? "Rejecting..." : "Reject KYC"} 
+                            primaryOutline 
+                            onClick={handleRejectClick}
+                            disabled={isSubmitting}
+                        />
                     </div>
                 </div>
             </div>

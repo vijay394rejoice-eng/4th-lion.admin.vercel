@@ -69,9 +69,23 @@
                     margin: 0 0 16px 0;
                 }
 
-                img {
+                a {
                     display: block;
                     width: 100%;
+                    cursor: pointer;
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                    border-radius: 8px;
+                    overflow: hidden;
+
+                    &:hover {
+                        transform: scale(1.02);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    }
+
+                    img {
+                        display: block;
+                        width: 100%;
+                    }
                 }
             }
 

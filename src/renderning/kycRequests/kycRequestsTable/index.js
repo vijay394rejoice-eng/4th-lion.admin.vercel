@@ -2,7 +2,9 @@
 import React, { useState, useEffect } from "react";
 import styles from "./kycRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getKYCRequests } from "@/services/kyc";
+import { getKYCRequests, approveKYC, rejectKYC } from "@/services/kyc";
+import KycPreview from "@/components/kycPreview";
+import toast from "react-hot-toast";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -32,6 +34,46 @@ export default function KycRequestsTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  console.log("KYC Requests data:", selectedRequest); // Debug log to check data structure
+
+  const handleApprove = async (requestId, remarks) => {
+    setIsSubmitting(true);
+    try {
+      const res = await approveKYC(requestId, { remarks });
+      if (res && res.status === 1) {
+        toast.success(res.message || "KYC request approved successfully");
+        setSelectedRequest(null);
+        fetchKycRequests(currentPage);
+      } else {
+        toast.error(res?.message || "Failed to approve KYC");
+      }
+    } catch (err) {
+      console.error("Failed to approve KYC:", err);
+      toast.error(err?.message || "Something went wrong while approving");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleReject = async (requestId, remarks) => {
+    setIsSubmitting(true);
+    try {
+      const res = await rejectKYC(requestId, { remarks });
+      if (res && res.status === 1) {
+        toast.success(res.message || "KYC request rejected successfully");
+        setSelectedRequest(null);
+        fetchKycRequests(currentPage);
+      } else {
+        toast.error(res?.message || "Failed to reject KYC");
+      }
+    } catch (err) {
+      console.error("Failed to reject KYC:", err);
+      toast.error(err?.message || "Something went wrong while rejecting");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const pageSize = 10;
 
@@ -187,6 +229,15 @@ export default function KycRequestsTable() {
           totalItems={totalItems}
           onPageChange={handlePageChange}
         />
+        {selectedRequest && (
+          <KycPreview
+            request={selectedRequest}
+            onClose={() => setSelectedRequest(null)}
+            onApprove={handleApprove}
+            onReject={handleReject}
+            isSubmitting={isSubmitting}
+          />
+        )}
       </div>
     </>
   );

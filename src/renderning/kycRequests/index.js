@@ -18,7 +18,7 @@ export default function KycRequests() {
             {/* <UserInformationEdit /> */}
             {/* <LogoutModal /> */}
             {/* <KycPreview /> */}
-            <AddNewSubAdmin />
+            {/* <AddNewSubAdmin /> */}
         </div>
     )
 }
