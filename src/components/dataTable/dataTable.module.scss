@@ -1,0 +1,128 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.dataTableContainer {
+    width: 100%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    height: calc(100dvh - 215px);
+    overflow: auto;
+
+    // Webkit scrollbar customizations
+    &::-webkit-scrollbar {
+        height: 6px;
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 100px;
+
+        &:hover {
+            background: #94A3B8;
+        }
+    }
+}
+
+.headerCard {
+    background: #FFF;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 12px; // Gap between header and body cards
+    width: 100%;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.bodyCard {
+    background: #FFF;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    width: 100%;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: left;
+    table-layout: fixed; // Ensures absolute column alignment between separate tables
+}
+
+.thead {
+    background: #FFF;
+
+    th {
+        padding: 18px 24px; // Align horizontal padding with td
+        font-family: var(--font-manrope);
+        color: var(--Text-Primary, #141414);
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        white-space: nowrap;
+        border: none;
+    }
+}
+
+.tbody {
+    tr {
+        background: #FFF;
+        border-bottom: 1px solid #F1F5F9; // Separators inside the body card
+        transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+            background-color: #F8FAFC;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    td {
+        padding: 16px 24px;
+        font-family: var(--font-manrope);
+        font-size: 14px;
+        font-weight: 500;
+        color: #475569; // Slate-600
+        line-height: normal;
+        vertical-align: middle;
+        white-space: nowrap;
+
+        &.name {
+            color: #0F172A; // Slate-900 for Name
+            font-weight: 600;
+        }
+
+        &.profit {
+            color: #0F172A; // Slate-900 for Profit
+            font-weight: 600;
+        }
+    }
+}
+
+.emptyCell {
+    padding: 32px;
+    text-align: center;
+    color: #94A3B8;
+    font-size: 14px;
+    font-family: var(--font-manrope);
+}

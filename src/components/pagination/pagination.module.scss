@@ -7,7 +7,7 @@
     justify-content: space-between;
     background: #F1F5F9;
     border-radius: 12px;
-    padding: 20px 0 0 0;
+    padding: 0;
     font-family: var(--font-manrope);
 
     .leftSection {
@@ -30,6 +30,15 @@
             &:hover {
                 background: rgba(0, 0, 0, 0.05);
                 border-radius: 8px;
+            }
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+
+                &:hover {
+                    background: transparent;
+                }
             }
         }
 

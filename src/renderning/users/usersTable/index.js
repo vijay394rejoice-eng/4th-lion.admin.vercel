@@ -1,6 +1,7 @@
+'use client'
 import React from 'react';
 import styles from './usersTable.module.scss';
-import Pagination from '@/components/pagination';
+import DataTable from '@/components/dataTable';
 
 export default function UsersTable() {
     // Generate 14 rows of user data to match the screenshot exactly
@@ -14,52 +15,25 @@ export default function UsersTable() {
         profit: "$42,120.45"
     }));
 
-    return (
-        <>
-            <div className={styles.usersTable}>
-                <div className={styles.tableWrapper}>
-                    {/* Floating Header Card */}
-                    <div className={styles.headerCard}>
-                        <table className={styles.table}>
-                            <thead className={styles.thead}>
-                                <tr>
-                                    <th>Date Joined</th>
-                                    <th>User ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Partner</th>
-                                    <th>Profit</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+    const columns = [
+        { header: "Date Joined", accessor: "dateJoined", width: "22%" },
+        { header: "User ID", accessor: "userId", width: "12%" },
+        { header: "Name", accessor: "name", width: "16%", className: styles.name },
+        { header: "Email", accessor: "email", width: "22%" },
+        { header: "Partner", accessor: "partner", width: "10%" },
+        { header: "Profit", accessor: "profit", width: "10%", className: styles.profit },
+        { 
+            header: "Action", 
+            width: "8%", 
+            cell: (row) => (
+                <button className={styles.viewBtn}>
+                    View
+                </button>
+            ) 
+        }
+    ];
 
-                    {/* Floating Body Card containing stacked rows */}
-                    <div className={styles.bodyCard}>
-                        <table className={styles.table}>
-                            <tbody className={styles.tbody}>
-                                {users.map((user) => (
-                                    <tr key={user.id}>
-                                        <td >{user.dateJoined}</td>
-                                        <td >{user.userId}</td>
-                                        <td className={styles.name}>{user.name}</td>
-                                        <td >{user.email}</td>
-                                        <td >{user.partner}</td>
-                                        <td className={styles.profit}>{user.profit}</td>
-                                        <td>
-                                            <button className={styles.viewBtn}>
-                                                View
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <Pagination />
-        </>
+    return (
+        <DataTable columns={columns} data={users} pageSize={10} />
     );
 }
