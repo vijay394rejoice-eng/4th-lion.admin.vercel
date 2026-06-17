@@ -11,6 +11,23 @@
         }
     }
 
+    &.primaryOutline {
+        button {
+            border: 1px solid #FBD242;
+            background-color: transparent;
+            color: #141414;
+            background: transparent;
+        }
+    }
+
+    &.danger {
+        button {
+            border: 1px solid #EC4343;
+            background-color: #EC4343;
+            color: #fff;
+        }
+    }
+
     button {
         border-radius: 8px;
         background: var(--Yellow, #FBD242);

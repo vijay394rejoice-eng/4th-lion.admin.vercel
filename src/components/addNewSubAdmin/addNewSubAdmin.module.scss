@@ -1,0 +1,117 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.addNewSubAdmin {
+    background: rgba(3, 15, 15, 0.10);
+    backdrop-filter: blur(15px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .modal {
+        border-radius: var(--Radius-12, 12px);
+        background: #FFF;
+        max-width: 444px;
+        width: 100%;
+        box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.06), 0 8px 16px -4px rgba(20, 21, 26, 0.06);
+
+        .modalheader {
+            padding: 32px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+
+
+            h2 {
+                color: var(--Text-Primary, #141414);
+                font-size: 28px;
+                font-weight: 700;
+                line-height: 110%;
+            }
+
+
+        }
+
+        .buttonGrid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 12px;
+        }
+
+        .modalBody {
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+
+            .allCheckboxtext {
+                p {
+                    color: var(--Text-Primary, #141414);
+                    font-size: 14px;
+                    font-weight: 600;
+                    line-height: normal;
+                    margin: 0 0 16px 0;
+                    font-family: var(--font-manrope);
+                }
+
+                .checkboxList {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 14px;
+                }
+
+                .checkboxItem {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    cursor: pointer;
+                    user-select: none;
+                }
+
+                .hiddenCheckbox {
+                    position: absolute;
+                    opacity: 0;
+                    width: 0;
+                    height: 0;
+                    pointer-events: none;
+                }
+
+                .customCheckbox {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 4px;
+                    border: 1px solid rgba(20, 21, 26, 0.15);
+                    background: #FFFFFF;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                    flex-shrink: 0;
+
+                    svg {
+                        display: block;
+                    }
+
+                    &.checked {
+                        background: var(--Yellow, #FBD242);
+                        border-color: var(--Yellow, #FBD242);
+                    }
+                }
+
+                .checkboxLabel {
+                    color: var(--Text-Secondary, #555);
+                    font-size: 14px;
+                    font-family: var(--font-manrope);
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: normal;
+                }
+            }
+
+        }
+    }
+}

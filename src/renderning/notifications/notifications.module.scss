@@ -1,0 +1,85 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.notifications {
+    max-width: 940px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    .box {
+        border-radius: var(--Radius-12, 12px);
+        background: #FFF;
+
+        .boxBody {
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+
+            .uplodBox {
+
+                label {
+                    color: var(--Text-Primary, #141414);
+                    font-size: 14px;
+                    font-weight: 600;
+                    line-height: normal;
+                    display: block;
+                    padding: 0 0 8px 0;
+                }
+
+                .upload {
+                    border-radius: var(--Radius-s, 8px);
+                    border: 2px dashed rgba(0, 0, 0, 0.10);
+                    background: rgba(0, 0, 0, 0.04);
+                    height: 146px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 14px;
+
+                    .iconCenter {
+                        display: flex;
+                        justify-content: center;
+                        padding: 0 0 8px 0;
+                    }
+
+                    p {
+                        margin: 0 0 8px 0;
+                        color: var(--Text-Primary, #141414);
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        font-family: var(--font-manrope);
+
+                        &:last-child {
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+
+            .buttonGrid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                padding: 8px 0 0 0;
+            }
+        }
+
+        .boxHeader {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+            padding: 20px 32px;
+
+            h2 {
+                color: var(--Text-Primary, #141414);
+                font-family: var(--font-manrope);
+                font-size: 20px;
+                font-weight: 600;
+                line-height: normal;
+            }
+        }
+    }
+}

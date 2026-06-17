@@ -1,0 +1,80 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+
+.kycPreview {
+    background: rgba(3, 15, 15, 0.10);
+    backdrop-filter: blur(15px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .modal {
+        border-radius: var(--Radius-12, 12px);
+        background: #FFF;
+        max-width: 444px;
+        width: 100%;
+        box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.06), 0 8px 16px -4px rgba(20, 21, 26, 0.06);
+
+        .modalheader {
+            padding: 32px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+
+
+            h2 {
+                color: var(--Text-Primary, #141414);
+                font-size: 28px;
+                font-weight: 700;
+                line-height: 110%;
+                margin: 0 0 8px 0;
+            }
+
+            p {
+                color: var(--Text-Secondary, #555);
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 100%;
+                font-family: var(--font-manrope);
+                letter-spacing: -0.176px;
+            }
+        }
+
+        .buttonGrid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .modalBody {
+            padding: 32px;
+         
+
+            .twoCol {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+                padding: 0 0 20px 0;
+
+                p {
+                    color: var(--Text-Primary, #141414);
+                    font-size: 14px;
+                    font-weight: 600;
+                    font-family: var(--font-manrope);
+                    line-height: normal;
+                    margin: 0 0 16px 0;
+                }
+
+                img {
+                    display: block;
+                    width: 100%;
+                }
+            }
+
+        }
+    }
+}
