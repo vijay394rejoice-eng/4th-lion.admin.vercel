@@ -15,7 +15,8 @@ export default function Button({ text, icon, outline, danger, primaryOutline, di
                 {...props}
             >
                 {text}
-                {icon && <img src={icon} alt={text} />}
+                {typeof icon === "string" && <img src={icon} alt={text} />}
+                {typeof icon === "object" && icon}
             </motion.button>
         </div>
     )

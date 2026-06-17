@@ -11,15 +11,18 @@
 
 .tableWrapper {
     width: 100%;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    height: calc(100dvh - 215px);
     overflow: auto;
+    padding-bottom: 8px;
+    max-height: calc(100dvh - 215px);
+    
+    // Firefox scrollbar customizations
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 transparent;
 
     // Webkit scrollbar customizations
     &::-webkit-scrollbar {
-        height: 6px;
-        width: 6px;
+        height: 8px;
+        width: 8px;
     }
 
     &::-webkit-scrollbar-track {
@@ -36,20 +39,7 @@
     }
 }
 
-.headerCard {
-    background: #FFF;
-    border-radius: 8px;
-    border: 1px solid #E2E8F0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    margin-bottom: 12px; // Gap between header and body cards
-    width: 100%;
-    overflow: hidden;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.bodyCard {
+.tableCard {
     background: #FFF;
     border-radius: 8px;
     border: 1px solid #E2E8F0;
@@ -63,7 +53,7 @@
     border-collapse: collapse;
     border-spacing: 0;
     text-align: left;
-    table-layout: fixed; // Ensures absolute column alignment between separate tables
+    table-layout: auto; // Let browser auto-calculate widths for flexible layout!
 }
 
 .thead {
@@ -78,7 +68,11 @@
         font-weight: 600;
         line-height: normal;
         white-space: nowrap;
-        border: none;
+        border-bottom: 1px solid #E2E8F0; // Line separating sticky header from body rows
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #FFF; // Required for sticky overlay
     }
 }
 

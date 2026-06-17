@@ -1,0 +1,273 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.usersTable {
+    width: 100%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    height: calc(100dvh - 215px);
+    overflow: auto;
+
+    // Webkit scrollbar customizations
+    &::-webkit-scrollbar {
+        height: 6px;
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 100px;
+
+        &:hover {
+            background: #94A3B8;
+        }
+    }
+}
+
+.headerCard {
+    background: #FFF;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 12px; // Gap between header and body cards
+    width: 100%;
+    min-width: 900px; // Lock minimum width to trigger overflow-x scroll on the wrapper
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.bodyCard {
+    background: #FFF;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    width: 100%;
+    min-width: 900px; // Lock minimum width to trigger overflow-x scroll on the wrapper
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: left;
+    table-layout: fixed; // Ensures absolute column alignment between separate tables
+}
+
+.thead {
+    background: #FFF;
+
+    th {
+        padding: 18px 24px; // Align horizontal padding with td
+        font-family: var(--font-manrope);
+        color: var(--Text-Primary, #141414);
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        white-space: nowrap;
+        border: none;
+    }
+}
+
+.tbody {
+    tr {
+        background: #FFF;
+        border-bottom: 1px solid #F1F5F9; // Separators inside the body card
+        transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+            background-color: #F8FAFC;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    td {
+        padding: 16px 24px;
+        font-family: var(--font-manrope);
+        font-size: 14px;
+        font-weight: 500;
+        color: #475569; // Slate-600
+        line-height: normal;
+        vertical-align: middle;
+        white-space: nowrap;
+
+        &.name {
+            color: #0F172A; // Slate-900 for Name
+            font-weight: 600;
+        }
+
+        &.profit {
+            color: #0F172A; // Slate-900 for Profit
+            font-weight: 600;
+        }
+    }
+}
+
+.userIdText {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.viewBtn {
+    background: #F1F5F9; // Slate-100
+    color: #475569; // Slate-600
+    border: none;
+    outline: none;
+    font-family: var(--font-manrope);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background: #E2E8F0; // Slate-200
+        color: #0F172A; // Slate-900
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+}
+
+.statusBadge {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &.pending {
+        background-color: #FEF3C7; // Amber-100
+        color: #D97706; // Amber-600
+    }
+
+    &.approved {
+        background-color: #DCFCE7; // Green-100
+        color: #15803D; // Green-700
+    }
+
+    &.rejected {
+        background-color: #FEE2E2; // Red-100
+        color: #B91C1C; // Red-700
+    }
+}
+
+.roleText {
+    font-weight: 600;
+    font-size: 13px;
+    color: #475569;
+    text-transform: uppercase;
+}
+
+.docContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 100%;
+}
+
+.docLink {
+    color: #2563EB; // Blue-600
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background-color: #EFF6FF; // Blue-50
+    border: 1px solid #DBEAFE;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+        background-color: #DBEAFE; // Blue-100
+        color: #1D4ED8; // Blue-700
+        border-color: #BFDBFE;
+        transform: translateY(-1px);
+    }
+}
+
+// Skeleton loading styles
+@keyframes skeletonPulse {
+    0% {
+        background-color: #f1f5f9;
+    }
+
+    50% {
+        background-color: #e2e8f0;
+    }
+
+    100% {
+        background-color: #f1f5f9;
+    }
+}
+
+.skeleton {
+    display: inline-block;
+    height: 16px;
+    border-radius: 4px;
+    animation: skeletonPulse 1.5s infinite ease-in-out;
+    background-color: #f1f5f9;
+
+    &.text {
+        width: 80%;
+    }
+
+    &.short {
+        width: 45%;
+    }
+
+    &.badge {
+        width: 80px;
+        height: 24px;
+        border-radius: 100px;
+    }
+}
+
+.tableContainer {
+    width: 100%;
+
+    :global(th) {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    :global(td) {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+}

@@ -1,0 +1,94 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.subAdminHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 20px 0;
+
+    .rightContentAlignment {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .button {
+            button {
+                padding: 8px 12px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-family: var(--font-manrope);
+                border-radius: 8px;
+                border: 1px solid var(--Input-Stroke, #E2E8F0);
+                background: #FFF;
+                color: var(--Text-Secondary, #475569);
+                font-size: 16px;
+                cursor: pointer;
+                font-weight: 600;
+                color: #141414;
+                line-height: normal;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+                &:hover {
+                    background: #F8FAFC;
+                    color: var(--Text-Primary, #0F172A);
+                    border-color: #CBD5E1;
+                    transform: translateY(-1px);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                }
+            }
+        }
+        button {
+            padding: 8px 12px;
+        }
+
+    }
+
+    .searchbar {
+        width: 100%;
+        max-width: 370px;
+        position: relative;
+
+        input {
+            width: 100%;
+            height: 38px;
+            border-radius: 8px;
+            border: 1px solid var(--Input-Stroke, #FFF);
+            background: #FFF;
+            font-family: var(--font-manrope);
+            color: var(--Text-Primary, #141414);
+            font-size: 16px;
+            font-weight: 500;
+            outline: none;
+            line-height: normal;
+            padding-left: 12px;
+            padding-right: 40px;
+        }
+
+        .searchIcon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+
+            svg {
+                cursor: pointer;
+            }
+        }
+
+        ::placeholder {
+            font-family: var(--font-manrope);
+            color: var(--Text-Primary, #141414);
+            font-size: 16px;
+            font-weight: 500;
+            line-height: normal;
+        }
+    }
+}

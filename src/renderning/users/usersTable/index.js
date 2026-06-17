@@ -67,7 +67,7 @@ export default function UsersTable() {
     { 
       header: "Date Joined", 
       accessor: "created_at", 
-      width: "18%",
+      width: "15%",
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text}`} />
       ) : (
@@ -75,21 +75,9 @@ export default function UsersTable() {
       )
     },
     { 
-      header: "User ID", 
-      accessor: "id", 
-      width: "18%",
-      cell: (row) => row.isSkeleton ? (
-        <span className={`${styles.skeleton} ${styles.text}`} />
-      ) : (
-        <span className={styles.userIdText} title={row.id}>
-          {row.id}
-        </span>
-      )
-    },
-    { 
       header: "Name", 
       accessor: "name", 
-      width: "16%", 
+      width: "14%", 
       className: styles.name,
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text}`} />
@@ -100,7 +88,7 @@ export default function UsersTable() {
     { 
       header: "Email", 
       accessor: "email", 
-      width: "20%",
+      width: "18%",
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text}`} />
       ) : (
@@ -110,7 +98,7 @@ export default function UsersTable() {
     { 
       header: "Partner", 
       accessor: "partner", 
-      width: "10%",
+      width: "9%",
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
       ) : (
@@ -120,7 +108,7 @@ export default function UsersTable() {
     { 
       header: "Profit", 
       accessor: "profit", 
-      width: "10%", 
+      width: "9%", 
       className: styles.profit,
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
@@ -129,8 +117,38 @@ export default function UsersTable() {
       )
     },
     { 
+      header: "Investment Account ID", 
+      accessor: "investment_account_id", 
+      width: "12%",
+      cell: (row) => row.isSkeleton ? (
+        <span className={`${styles.skeleton} ${styles.text}`} />
+      ) : (
+        row.investment_account_id || "-"
+      )
+    },
+    { 
+      header: "PNL", 
+      accessor: "pnl", 
+      width: "10%",
+      cell: (row) => row.isSkeleton ? (
+        <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
+      ) : (
+        row.pnl || "-"
+      )
+    },
+    { 
+      header: "Invested Value", 
+      accessor: "invested_value", 
+      width: "10%",
+      cell: (row) => row.isSkeleton ? (
+        <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
+      ) : (
+        row.invested_value || "-"
+      )
+    },
+    { 
       header: "Action", 
-      width: "8%", 
+      width: "3%", 
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.badge}`} />
       ) : (

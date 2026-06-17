@@ -13,7 +13,7 @@ export default function DataTable({
   onPageChange,
   // Customization
   emptyMessage = 'No records found',
-  minWidth = '900px',
+  minWidth = '1200px',
 }) {
   // If controlled pagination is not provided, manage page state internally
   const isControlled = currentPage !== undefined && onPageChange !== undefined;
@@ -40,8 +40,7 @@ export default function DataTable({
   return (
     <div className={styles.dataTableContainer}>
       <div className={styles.tableWrapper}>
-        {/* Floating Header Card */}
-        <div className={styles.headerCard} style={{ minWidth }}>
+        <div className={styles.tableCard} style={{ minWidth }}>
           <table className={styles.table}>
             <colgroup>
               {columns.map((col, idx) => (
@@ -57,17 +56,6 @@ export default function DataTable({
                 ))}
               </tr>
             </thead>
-          </table>
-        </div>
-
-        {/* Floating Body Card containing stacked rows */}
-        <div className={styles.bodyCard} style={{ minWidth }}>
-          <table className={styles.table}>
-            <colgroup>
-              {columns.map((col, idx) => (
-                <col key={idx} style={{ width: col.width || 'auto' }} />
-              ))}
-            </colgroup>
             <tbody className={styles.tbody}>
               {paginatedData.length > 0 ? (
                 paginatedData.map((row, rowIdx) => (
