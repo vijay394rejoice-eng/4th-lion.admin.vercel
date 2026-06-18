@@ -1,0 +1,122 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.editTradeModal {
+    background: rgba(3, 15, 15, 0.10);
+    backdrop-filter: blur(15px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 20px;
+
+    .modal {
+        border-radius: var(--Radius-12, 12px);
+        background: #FFF;
+        max-width: 650px;
+        width: 100%;
+        box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.06), 0 8px 16px -4px rgba(20, 21, 26, 0.06);
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+
+        .modalheader {
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+            flex-shrink: 0;
+
+            h2 {
+                color: var(--Text-Primary, #141414);
+                font-size: 24px;
+                font-weight: 700;
+                line-height: 110%;
+                margin: 0;
+            }
+
+            .rightAlignment {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                svg {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .modalBody {
+            padding: 32px;
+            overflow-y: auto;
+            flex-grow: 1;
+
+            .colgrid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+
+                .column {
+                    grid-column: span 2;
+                }
+            }
+        }
+
+        .buttonGrid {
+            padding: 24px 32px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            border-top: 1px solid rgba(0, 0, 0, 0.10);
+            background: #FAFAFA;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            flex-shrink: 0;
+        }
+    }
+}
+
+.selectWrapper {
+    display: flex;
+    flex-direction: column;
+    
+    label {
+        color: var(--Text-Primary, #141414);
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-family: var(--font-manrope);
+    }
+    
+    select {
+        width: 100%;
+        height: 38px;
+        border-radius: 8px;
+        border: 1px solid var(--Input-Stroke, #E2E8F0);
+        background: #FFF;
+        font-family: var(--font-manrope);
+        color: var(--Text-Primary, #141414);
+        font-size: 16px;
+        font-weight: 500;
+        outline: none;
+        padding: 0 12px;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        cursor: pointer;
+
+        &:disabled {
+            background-color: #F1F5F9;
+            cursor: not-allowed;
+        }
+    }
+}

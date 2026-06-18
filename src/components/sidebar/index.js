@@ -12,6 +12,7 @@ import KycIcon from '@/svg/kycIcon';
 import CheckboxIcon from '@/svg/checkboxIcon';
 import AdminIcon from '@/svg/adminIcon';
 import SettingIcon from '@/svg/settingIcon';
+import TradesIcon from '@/svg/tradesIcon';
 
 const Logo = '/assets/logo/logo.svg';
 
@@ -21,7 +22,7 @@ export default function Sidebar() {
   const menuItems = [
     { label: 'Dashboard', path: '/dashboard', Icon: DashboardIcon },
     { label: 'Users', path: '/users', Icon: UserGroupIcon },
-    { label: 'Trades', path: '/trades', Icon: UserGroupIcon },
+    { label: 'Trades', path: '/trades', Icon: TradesIcon },
     { label: 'Commission', path: '/commission', Icon: CommissionIcon },
     { label: 'Withdraw Requests', path: '/withdraw-requests', Icon: WithdrawIcon },
     { label: 'Deposits', path: '/deposits', Icon: WithdrawIcon },

@@ -12,3 +12,10 @@ export const uploadTradesCsv = (formData) =>
 
 export const createTradeManual = (payload) =>
   request(() => api.post('/admin-trade/trades', payload));
+
+export const deleteTrade = (tradeId) =>
+  request(() => api.delete(`/admin-trade/trades/${tradeId}`));
+
+export const updateTrade = (tradeId, payload) =>
+  request(() => api.patch(`/admin-trade/trades/${tradeId}`, payload));
+

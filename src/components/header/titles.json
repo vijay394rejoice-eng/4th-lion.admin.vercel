@@ -1,6 +1,7 @@
 {
   "/dashboard": "Dashboard",
   "/users": "Users",
+  "/trades": "Trades",
   "/commission": "Commission",
   "/withdraw-requests": "Withdraw Requests",
   "/deposits": "Deposit Requests",
