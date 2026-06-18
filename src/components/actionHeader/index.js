@@ -6,7 +6,7 @@ import FilterIcon from '@/svg/filterIcon';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExportIcon from '@/svg/exportIcon';
 
-export default function ActionHeader() {
+export default function ActionHeader({ onExport }) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -217,7 +217,7 @@ export default function ActionHeader() {
                     </AnimatePresence>
                 </div>
                 <div className={styles.button}>
-                    <button>
+                    <button onClick={onExport}>
                         Export
                         <ExportIcon />
                     </button>

@@ -1,4 +1,3 @@
-import ActionHeader from '@/components/actionHeader'
 import React from 'react'
 import KycRequestsTable from './kycRequestsTable'
 import WithdrawRequestsCard from '../withdrawRequests/withdrawRequestsCard'
@@ -12,7 +11,6 @@ export default function KycRequests() {
     return (
         <div>
             <WithdrawRequestsCard />
-            <ActionHeader />
             <KycRequestsTable />
             {/* <UserInformation/> */}
             {/* <UserInformationEdit /> */}

@@ -7,3 +7,6 @@ export const login = (payload) =>
 
 export const refresh = (payload) =>
   request(() => api.post('/user/refresh', payload));
+
+export const changePassword = (payload) =>
+  request(() => api.post('/user/change-password', payload));

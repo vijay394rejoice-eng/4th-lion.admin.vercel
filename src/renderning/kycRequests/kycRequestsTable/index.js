@@ -5,6 +5,8 @@ import DataTable from "@/components/dataTable";
 import { getKYCRequests, approveKYC, rejectKYC } from "@/services/kyc";
 import KycPreview from "@/components/kycPreview";
 import toast from "react-hot-toast";
+import ActionHeader from "@/components/actionHeader";
+import { exportToCsv } from "@/utils/exportCsv";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -100,6 +102,10 @@ export default function KycRequestsTable() {
     setCurrentPage(page);
   };
 
+  const handleExport = () => {
+    exportToCsv(data, columns, "kyc_requests.csv");
+  };
+
   // Generate 10 skeleton rows when loading to align columns nicely
   const skeletonData = Array.from({ length: pageSize }, (_, index) => ({
     id: `skeleton-${index}`,
@@ -111,6 +117,7 @@ export default function KycRequestsTable() {
       header: "Created At",
       accessor: "created_at",
       width: "18%",
+      csvCell: (row) => formatDate(row.created_at),
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -148,6 +155,7 @@ export default function KycRequestsTable() {
       header: "Name",
       accessor: "name",
       width: "20%",
+      csvCell: (row) => `${row.first_name || ""} ${row.last_name || ""}`.trim() || "-",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -220,6 +228,7 @@ export default function KycRequestsTable() {
 
   return (
     <>
+      <ActionHeader onExport={handleExport} />
       <div className={styles.tableContainer}>
         <DataTable
           columns={columns}

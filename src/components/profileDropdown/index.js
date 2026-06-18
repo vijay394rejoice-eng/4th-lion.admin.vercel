@@ -9,6 +9,7 @@ import EditIcon from '@/svg/editIcon';
 import KeyIcon from '@/svg/keyIcon';
 import LogoutIcon from '@/svg/logoutIcon';
 import ChevronRightIcon from '@/svg/chevronRightIcon';
+import SettingIcon from '@/svg/settingIcon';
 
 export default function ProfileDropdown() {
   const router = useRouter();
@@ -31,21 +32,30 @@ export default function ProfileDropdown() {
   };
 
   const menuItems = [
+    // {
+    //   id: 'edit-profile',
+    //   label: 'Edit Profile',
+    //   icon: <EditIcon />,
+    //   onClick: () => {
+    //     console.log('Edit Profile Clicked');
+    //     setIsOpen(false);
+    //   }
+    // },
+    // {
+    //   id: 'change-password',
+    //   label: 'Change Password',
+    //   icon: <KeyIcon />,
+    //   onClick: () => {
+    //     console.log('Change Password Clicked');
+    //     setIsOpen(false);
+    //   }
+    // },
     {
-      id: 'edit-profile',
-      label: 'Edit Profile',
-      icon: <EditIcon />,
+      id: 'settings',
+      label: 'Settings',
+      icon: <SettingIcon />,
       onClick: () => {
-        console.log('Edit Profile Clicked');
-        setIsOpen(false);
-      }
-    },
-    {
-      id: 'change-password',
-      label: 'Change Password',
-      icon: <KeyIcon />,
-      onClick: () => {
-        console.log('Change Password Clicked');
+        console.log('Settings Clicked');
         setIsOpen(false);
       }
     },
@@ -79,7 +89,7 @@ export default function ProfileDropdown() {
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <div className={styles.profileHeader}>
+            {/* <div className={styles.profileHeader}>
               <div className={styles.profileDetails}>
                 <h4 className={styles.name}>John Doe</h4>
                 <p className={styles.email}>johnathandoe@gmail.com</p>
@@ -89,7 +99,7 @@ export default function ProfileDropdown() {
               </div>
             </div>
 
-            <div className={styles.divider} />
+            <div className={styles.divider} /> */}
 
             <div className={styles.menuList}>
               {menuItems.map((item) => (
