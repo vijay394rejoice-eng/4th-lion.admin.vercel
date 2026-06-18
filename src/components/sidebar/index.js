@@ -21,6 +21,7 @@ export default function Sidebar() {
   const menuItems = [
     { label: 'Dashboard', path: '/dashboard', Icon: DashboardIcon },
     { label: 'Users', path: '/users', Icon: UserGroupIcon },
+    { label: 'Trades', path: '/trades', Icon: UserGroupIcon },
     { label: 'Commission', path: '/commission', Icon: CommissionIcon },
     { label: 'Withdraw Requests', path: '/withdraw-requests', Icon: WithdrawIcon },
     { label: 'Deposits', path: '/deposits', Icon: WithdrawIcon },
