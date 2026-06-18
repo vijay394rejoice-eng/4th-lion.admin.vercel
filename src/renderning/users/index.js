@@ -8,7 +8,7 @@ export default function Users() {
         <div>
             <ActionHeader />
             <UsersTable />
-            <ApproveRequest />
+            {/* <ApproveRequest /> */}
         </div>
     )
 }

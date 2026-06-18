@@ -2,7 +2,9 @@
 import React, { useState, useEffect } from "react";
 import styles from "./usersTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getUsers } from "@/services/user";
+import { getUsers, blockUser, unblockUser } from "@/services/user";
+import LogoutModal from "@/components/logoutModal";
+import toast from "react-hot-toast";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -32,6 +34,11 @@ export default function UsersTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Modal control states
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [confirmAction, setConfirmAction] = useState(null); // 'block' | 'unblock' | null
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const pageSize = 10;
 
   const fetchUsers = async (page) => {
@@ -57,6 +64,43 @@ export default function UsersTable() {
     setCurrentPage(page);
   };
 
+  const handleToggleBlockClick = (user, action) => {
+    setSelectedUser(user);
+    setConfirmAction(action);
+  };
+
+  const handleConfirmToggleBlock = async () => {
+    if (!selectedUser || !confirmAction) return;
+    setIsSubmitting(true);
+    try {
+      let res;
+      if (confirmAction === "block") {
+        res = await blockUser(selectedUser.id);
+      } else {
+        res = await unblockUser(selectedUser.id);
+      }
+
+      if (res && res.status === 1) {
+        toast.success(res.message || `User ${confirmAction}ed successfully`);
+        setConfirmAction(null);
+        setSelectedUser(null);
+        fetchUsers(currentPage);
+      } else {
+        toast.error(res?.message || `Failed to ${confirmAction} user`);
+      }
+    } catch (err) {
+      console.error(`Failed to ${confirmAction} user:`, err);
+      toast.error(err?.message || `Something went wrong while trying to ${confirmAction} user`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCancelToggleBlock = () => {
+    setConfirmAction(null);
+    setSelectedUser(null);
+  };
+
   // Generate 10 skeleton rows when loading to align columns nicely
   const skeletonData = Array.from({ length: pageSize }, (_, index) => ({
     id: `skeleton-${index}`,
@@ -67,7 +111,7 @@ export default function UsersTable() {
     { 
       header: "Date Joined", 
       accessor: "created_at", 
-      width: "15%",
+      width: "13%",
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text}`} />
       ) : (
@@ -88,7 +132,7 @@ export default function UsersTable() {
     { 
       header: "Email", 
       accessor: "email", 
-      width: "18%",
+      width: "15%",
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text}`} />
       ) : (
@@ -119,7 +163,7 @@ export default function UsersTable() {
     { 
       header: "Investment Account ID", 
       accessor: "investment_account_id", 
-      width: "12%",
+      width: "10%",
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text}`} />
       ) : (
@@ -148,29 +192,57 @@ export default function UsersTable() {
     },
     { 
       header: "Action", 
-      width: "3%", 
-      cell: (row) => row.isSkeleton ? (
-        <span className={`${styles.skeleton} ${styles.badge}`} />
-      ) : (
-        <button className={styles.viewBtn}>
-          View
-        </button>
-      ) 
+      width: "10%", 
+      cell: (row) => {
+        if (row.isSkeleton) {
+          return <span className={`${styles.skeleton} ${styles.badge}`} />;
+        }
+        const isBlocked = row.is_active === false;
+        return isBlocked ? (
+          <button 
+            className={styles.unblockBtn}
+            onClick={() => handleToggleBlockClick(row, "unblock")}
+          >
+            Unblock
+          </button>
+        ) : (
+          <button 
+            className={styles.blockBtn}
+            onClick={() => handleToggleBlockClick(row, "block")}
+          >
+            Block
+          </button>
+        );
+      } 
     }
   ];
 
   const tableData = isLoading ? skeletonData : data;
 
   return (
-    <div className={styles.tableContainer}>
-      <DataTable 
-        columns={columns} 
-        data={tableData} 
-        pageSize={pageSize} 
-        currentPage={currentPage}
-        totalItems={totalItems}
-        onPageChange={handlePageChange}
-      />
-    </div>
+    <>
+      <div className={styles.tableContainer}>
+        <DataTable 
+          columns={columns} 
+          data={tableData} 
+          pageSize={pageSize} 
+          currentPage={currentPage}
+          totalItems={totalItems}
+          onPageChange={handlePageChange}
+        />
+      </div>
+
+      {confirmAction && selectedUser && (
+        <LogoutModal
+          message={`Are you sure you want to ${confirmAction} this user (${selectedUser.first_name || ""} ${selectedUser.last_name || ""})?`}
+          confirmText={confirmAction === "block" ? "Block" : "Unblock"}
+          confirmIcon={confirmAction === "block" ? "/assets/icons/block.svg" : "/assets/icons/right.svg"}
+          danger={confirmAction === "block"}
+          onConfirm={handleConfirmToggleBlock}
+          onCancel={handleCancelToggleBlock}
+          isSubmitting={isSubmitting}
+        />
+      )}
+    </>
   );
 }

@@ -1,0 +1,139 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.tableContainer {
+    width: 100%;
+
+    :global(th) {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    :global(td) {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+}
+
+.userIdText,
+.walletIdText {
+    display: inline-block;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.statusBadge {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &.pending {
+        background-color: #FEF3C7; // Amber-100
+        color: #D97706; // Amber-600
+    }
+
+    &.approved {
+        background-color: #DCFCE7; // Green-100
+        color: #15803D; // Green-700
+    }
+
+    &.rejected {
+        background-color: #FEE2E2; // Red-100
+        color: #B91C1C; // Red-700
+    }
+}
+
+.actionBtnGroup {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.approveBtn {
+    background: #02DF82; // Red-100
+    color: #FFFFFF; // Red-700
+    border: none;
+    outline: none;
+    font-family: var(--font-manrope);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 4px 12px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background: #02DF82; // Red-300
+        transform: translateY(-1px);
+    }
+}
+
+.rejectBtn {
+    background: #EC4343; // Red-100
+    color: #FFFFFF; // Red-700
+    border: none;
+    outline: none;
+    font-family: var(--font-manrope);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 4px 12px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background: #EC4343; // Red-300
+        transform: translateY(-1px);
+    }
+}
+
+// Skeleton loading styles
+@keyframes skeletonPulse {
+    0% {
+        background-color: #f1f5f9;
+    }
+
+    50% {
+        background-color: #e2e8f0;
+    }
+
+    100% {
+        background-color: #f1f5f9;
+    }
+}
+
+.skeleton {
+    display: inline-block;
+    height: 16px;
+    border-radius: 4px;
+    animation: skeletonPulse 1.5s infinite ease-in-out;
+    background-color: #f1f5f9;
+
+    &.text {
+        width: 80%;
+    }
+
+    &.short {
+        width: 45%;
+    }
+
+    &.badge {
+        width: 80px;
+        height: 24px;
+        border-radius: 100px;
+    }
+}

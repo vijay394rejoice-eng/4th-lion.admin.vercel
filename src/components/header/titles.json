@@ -1,0 +1,12 @@
+{
+  "/dashboard": "Dashboard",
+  "/users": "Users",
+  "/commission": "Commission",
+  "/withdraw-requests": "Withdraw Requests",
+  "/deposits": "Deposit Requests",
+  "/dp-requests": "DP Requests",
+  "/kyc-requests": "KYC Requests",
+  "/send-notifications": "Send Notifications",
+  "/sub-admins": "Sub-Admins",
+  "/settings": "Settings"
+}
