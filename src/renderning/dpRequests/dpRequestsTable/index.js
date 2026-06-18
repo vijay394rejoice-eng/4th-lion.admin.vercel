@@ -4,6 +4,8 @@ import styles from "./dpRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
 import { getPartnerRequests, approvePartnerRequest, rejectPartnerRequest } from "@/services/dpRequests";
 import LogoutModal from "@/components/logoutModal";
+import DPRequestsActionHeader from "../dpRequestsActionHeader";
+import { exportToCsv } from "@/utils/exportCsv";
 import toast from "react-hot-toast";
 
 const formatDate = (dateString) => {
@@ -28,12 +30,13 @@ const formatDate = (dateString) => {
   }
 };
 
-export default function DPRequestsTable({ onDataFetched, onLoadStart, filters }) {
+export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
   const [data, setData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [filters, setFilters] = useState({});
   
   // Modal control states
   const [confirmType, setConfirmType] = useState(null); // 'approve' | 'reject' | null
@@ -108,6 +111,10 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart, filters })
     setSelectedRequest(null);
   };
 
+  const handleExport = () => {
+    exportToCsv(data, columns, "partner_requests.csv");
+  };
+
   // Generate 10 skeleton rows when loading to align columns nicely
   const skeletonData = Array.from({ length: pageSize }, (_, index) => ({
     id: `skeleton-${index}`,
@@ -119,6 +126,7 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart, filters })
       header: "Created At",
       accessor: "created_at",
       width: "15%",
+      csvCell: (row) => formatDate(row.created_at),
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -129,6 +137,7 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart, filters })
     {
       header: "User",
       width: "18%",
+      csvCell: (row) => `${row.first_name || ""} ${row.last_name || ""} (${row.email || ""})`,
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -240,6 +249,10 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart, filters })
 
   return (
     <>
+      <DPRequestsActionHeader 
+        onApplyFilters={setFilters} 
+        onExport={handleExport} 
+      />
       <div className={styles.tableContainer}>
         <DataTable
           columns={columns}

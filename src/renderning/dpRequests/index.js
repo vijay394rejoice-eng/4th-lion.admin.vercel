@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import DPRequestsTable from './dpRequestsTable';
 import DPRequestsCard from './dpRequestsCard';
-import DPRequestsActionHeader from './dpRequestsActionHeader';
 
 export default function DPRequests() {
     const [counts, setCounts] = useState({
@@ -10,7 +9,6 @@ export default function DPRequests() {
         pendingRequestsCount: 0
     });
     const [isLoading, setIsLoading] = useState(true);
-    const [filters, setFilters] = useState({});
 
     const handleDataFetched = (fetchedCounts) => {
         setCounts(fetchedCounts);
@@ -28,11 +26,9 @@ export default function DPRequests() {
                 approvedCount={counts.approvedPartnersCount}
                 isLoading={isLoading}
             />
-            <DPRequestsActionHeader onApplyFilters={setFilters} />
             <DPRequestsTable 
                 onDataFetched={handleDataFetched}
                 onLoadStart={handleLoadStart}
-                filters={filters}
             />
         </div>
     );
