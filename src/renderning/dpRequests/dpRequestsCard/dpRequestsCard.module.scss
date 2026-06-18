@@ -1,0 +1,63 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.dpRequestsCard {
+    padding: 0 0 12px 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    .items {
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        background: #FFF;
+        padding: 20px;
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            border: 1px solid var(--Blue, #1C61BA);
+            background: rgba(28, 97, 186, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h3 {
+            margin: 20px 0 8px 0;
+            color: var(--Text-Primary, #141414);
+            font-size: 16px;
+            font-weight: 600;
+            line-height: normal;
+        }
+
+        p {
+            color: var(--Text-Primary, #141414);
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 100%;
+        }
+    }
+}
+
+@keyframes skeletonPulse {
+    0% {
+        background-color: #f1f5f9;
+    }
+    50% {
+        background-color: #e2e8f0;
+    }
+    100% {
+        background-color: #f1f5f9;
+    }
+}
+
+.skeletonVal {
+    display: inline-block;
+    height: 32px;
+    width: 60px;
+    border-radius: 6px;
+    animation: skeletonPulse 1.5s infinite ease-in-out;
+    background-color: #f1f5f9;
+}
