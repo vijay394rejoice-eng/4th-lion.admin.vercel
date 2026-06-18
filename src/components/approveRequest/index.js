@@ -2,8 +2,10 @@ import React from 'react'
 import styles from './approveRequest.module.scss';
 import GalleryView from '@/svg/galleryView';
 import Button from '../button';
+import CloseIcon from '@/svg/closeIcon';
 const RightIcon = 'assets/icons/right.svg';
-const CloseIcon = 'assets/icons/close.svg';
+const CloseIcons = 'assets/icons/close.svg';
+
 export default function ApproveRequest() {
     return (
         <div className={styles.approveRequest}>
@@ -37,7 +39,7 @@ export default function ApproveRequest() {
                 </div>
                 <div className={styles.buttonGrid}>
                     <Button text="Send" icon={RightIcon} />
-                    <Button text="Cancel" icon={CloseIcon} primaryOutline />
+                    <Button text="Cancel" icon={CloseIcons} primaryOutline />
                 </div>
             </div>
         </div>
