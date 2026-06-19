@@ -1,0 +1,59 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.profitSharingCard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+
+    .items {
+        border-radius: 8px;
+        padding: 20px;
+        background: #FFF;
+
+        h3 {
+            font-family: var(--font-manrope);
+            color: var(--Text-Primary, #141414);
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            margin: 0 0 8px 0;
+        }
+
+        span {
+            display: block;
+            font-family: var(--font-manrope);
+            color: var(--Text-Primary, #141414);
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 100%;
+        }
+
+        .link {
+            height: 40px;
+            border-radius: var(--Radius-s, 8px);
+            border: 1px solid var(--Input-Stroke, #FFF);
+            background: rgba(0, 0, 0, 0.04);
+            width: 100%;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            svg {
+                cursor: pointer;
+            }
+
+            p {
+                overflow: hidden;
+                color: var(--Text-Primary, #141414);
+                font-size: 14px;
+                font-weight: 500;
+                font-family: var(--font-manrope);
+                line-height: 20px;
+            }
+
+        }
+    }
+}

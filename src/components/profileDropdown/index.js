@@ -56,6 +56,7 @@ export default function ProfileDropdown() {
       icon: <SettingIcon />,
       onClick: () => {
         console.log('Settings Clicked');
+        router.push('/settings');
         setIsOpen(false);
       }
     },

@@ -12,7 +12,7 @@ export default function ProfitShareSetup() {
             <Input label='Company' spacingRemove placeholder='40%' />
             <Input label='Broker Commissions' spacingRemove placeholder='$5' />
             <div className={styles.buttonGrid}>
-                <Button text="Send" icon={RightIcon} />
+                <Button text="Save" icon={RightIcon} />
                 <Button text="Cancel" icon={CloseIcon} primaryOutline />
             </div>
         </div>

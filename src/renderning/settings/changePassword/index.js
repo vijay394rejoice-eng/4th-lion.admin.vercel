@@ -166,7 +166,7 @@ export default function ChangePassword() {
             <div className={styles.buttonGrid}>
                 <Button 
                     type="submit"
-                    text={isLoading ? "Sending..." : "Send"} 
+                    text={isLoading ? "Saving..." : "Save"} 
                     icon={RightIcon} 
                     disabled={isLoading}
                 />
