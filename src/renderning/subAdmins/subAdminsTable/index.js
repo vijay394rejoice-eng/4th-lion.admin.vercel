@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./kycRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
 import { getSubAdmins } from "@/services/subAdmin";
+import { exportToCsv } from "@/utils/exportCsv";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -26,7 +27,7 @@ const formatDate = (dateString) => {
   }
 };
 
-export default function SubAdminsTable({ refreshKey, onEditClick }) {
+export default function SubAdminsTable({ email, refreshKey, exportTrigger, onEditClick }) {
   const [data, setData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,7 +38,11 @@ export default function SubAdminsTable({ refreshKey, onEditClick }) {
   const fetchSubAdmins = async (page) => {
     setIsLoading(true);
     try {
-      const res = await getSubAdmins({ page, limit: pageSize });
+      const params = { page, limit: pageSize };
+      if (email) {
+        params.email = email;
+      }
+      const res = await getSubAdmins(params);
       if (res && res.status === 1) {
         setData(res.data?.items || []);
         setTotalItems(res.data?.total || 0);
@@ -49,9 +54,28 @@ export default function SubAdminsTable({ refreshKey, onEditClick }) {
     }
   };
 
+  // Track previous email to detect changes and reset page to 1
+  const prevEmailRef = useRef(email);
+
   useEffect(() => {
+    const emailChanged = prevEmailRef.current !== email;
+    if (emailChanged) {
+      prevEmailRef.current = email;
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+        return; // Don't fetch here; changing currentPage will trigger the effect again
+      }
+    }
+
     fetchSubAdmins(currentPage);
-  }, [currentPage, refreshKey]);
+  }, [currentPage, refreshKey, email]);
+
+  // Export to CSV when exportTrigger changes
+  useEffect(() => {
+    if (exportTrigger > 0) {
+      exportToCsv(data, columns, "sub_admins.csv");
+    }
+  }, [exportTrigger]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -68,6 +92,7 @@ export default function SubAdminsTable({ refreshKey, onEditClick }) {
       header: "Created At",
       accessor: "created_at",
       width: "18%",
+      csvCell: (row) => row.created_at ? formatDate(row.created_at) : "-",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -107,6 +132,7 @@ export default function SubAdminsTable({ refreshKey, onEditClick }) {
       header: "Name",
       accessor: "name",
       width: "20%",
+      csvCell: (row) => `${row.first_name || ""} ${row.last_name || ""}`.trim() || "-",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -123,6 +149,7 @@ export default function SubAdminsTable({ refreshKey, onEditClick }) {
       header: "Status",
       accessor: "status",
       width: "12%",
+      csvCell: (row) => row.status || "-",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.badge}`} />

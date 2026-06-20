@@ -7,6 +7,8 @@ import SubAdminHeader from "./subAdminHeader";
 export default function SubAdmins() {
   const [modalMode, setModalMode] = useState(null); // null, 'add', or sub-admin row object
   const [refreshKey, setRefreshKey] = useState(0);
+  const [emailFilter, setEmailFilter] = useState("");
+  const [exportTrigger, setExportTrigger] = useState(0);
 
   const handleSuccess = () => {
     setRefreshKey((prev) => prev + 1);
@@ -14,8 +16,18 @@ export default function SubAdmins() {
 
   return (
     <div>
-      <SubAdminHeader onAddClick={() => setModalMode("add")} />
-      <SubAdminsTable refreshKey={refreshKey} onEditClick={(row) => setModalMode(row)} />
+      <SubAdminHeader 
+        email={emailFilter} 
+        onEmailChange={setEmailFilter} 
+        onExport={() => setExportTrigger((prev) => prev + 1)}
+        onAddClick={() => setModalMode("add")} 
+      />
+      <SubAdminsTable 
+        email={emailFilter} 
+        refreshKey={refreshKey} 
+        exportTrigger={exportTrigger}
+        onEditClick={(row) => setModalMode(row)} 
+      />
       
       {modalMode && (
         <AddNewSubAdmin 
