@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./usersTable.module.scss";
 import DataTable from "@/components/dataTable";
 import { getUsers, blockUser, unblockUser } from "@/services/user";
@@ -28,7 +28,7 @@ const formatDate = (dateString) => {
   }
 };
 
-export default function UsersTable() {
+export default function UsersTable({ search, appliedFilters }) {
   const [data, setData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +44,28 @@ export default function UsersTable() {
   const fetchUsers = async (page) => {
     setIsLoading(true);
     try {
-      const res = await getUsers({ page, limit: pageSize });
+      const params = { page, limit: pageSize };
+      
+      if (search) {
+        params.search = search;
+      }
+
+      // role filter: role should be "USER" and "PARTNER"
+      // If only one role is selected, we filter by it. If both or none are selected, we omit to fetch all.
+      if (appliedFilters?.roles && appliedFilters.roles.length === 1) {
+        params.role = appliedFilters.roles[0];
+      }
+
+      // status filter: status should be true or false, this is for is_active
+      // If exactly one of 'active' or 'inactive' is selected, we filter by it. If 'all' is selected, we omit it.
+      if (appliedFilters?.statuses && appliedFilters.statuses.length === 1) {
+        const status = appliedFilters.statuses[0];
+        if (status === "active" || status === "inactive") {
+          params.is_active = status === "active";
+        }
+      }
+
+      const res = await getUsers(params);
       if (res && res.status === 1) {
         setData(res.data?.items || []);
         setTotalItems(res.data?.total || 0);
@@ -56,9 +77,25 @@ export default function UsersTable() {
     }
   };
 
+  // Track previous search/filters to detect when they change
+  const prevSearchRef = useRef(search);
+  const prevFiltersRef = useRef(appliedFilters);
+
   useEffect(() => {
+    const searchChanged = prevSearchRef.current !== search;
+    const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(appliedFilters);
+
+    if (searchChanged || filtersChanged) {
+      prevSearchRef.current = search;
+      prevFiltersRef.current = appliedFilters;
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+        return; // Don't fetch here; changing currentPage will trigger the effect again
+      }
+    }
+
     fetchUsers(currentPage);
-  }, [currentPage]);
+  }, [currentPage, search, appliedFilters]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
