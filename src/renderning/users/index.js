@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import UsersTable from './usersTable'
 import UserActionHeader from './userActionHeader'
 
@@ -9,6 +9,8 @@ export default function Users() {
         roles: [],      // array containing 'USER' and/or 'PARTNER'
         statuses: [],   // array containing 'active' and/or 'inactive'
     });
+    
+    const tableRef = useRef();
 
     return (
         <div>
@@ -17,8 +19,10 @@ export default function Users() {
                 onSearchChange={setSearch}
                 appliedFilters={appliedFilters}
                 onApplyFilters={setAppliedFilters}
+                onExport={() => tableRef.current?.handleExport()}
             />
             <UsersTable 
+                ref={tableRef}
                 search={search}
                 appliedFilters={appliedFilters}
             />

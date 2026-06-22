@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { exportToCsv } from "@/utils/exportCsv";
 import styles from "./usersTable.module.scss";
 import DataTable from "@/components/dataTable";
 import { getUsers, blockUser, unblockUser } from "@/services/user";
@@ -28,7 +29,7 @@ const formatDate = (dateString) => {
   }
 };
 
-export default function UsersTable({ search, appliedFilters }) {
+const UsersTable = forwardRef(({ search, appliedFilters }, ref) => {
   const [data, setData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -138,6 +139,12 @@ export default function UsersTable({ search, appliedFilters }) {
     setSelectedUser(null);
   };
 
+  useImperativeHandle(ref, () => ({
+    handleExport() {
+      exportToCsv(data, columns, "users.csv");
+    }
+  }));
+
   // Generate 10 skeleton rows when loading to align columns nicely
   const skeletonData = Array.from({ length: pageSize }, (_, index) => ({
     id: `skeleton-${index}`,
@@ -149,6 +156,7 @@ export default function UsersTable({ search, appliedFilters }) {
       header: "Date Joined", 
       accessor: "created_at", 
       width: "13%",
+      csvCell: (row) => row.created_at ? formatDate(row.created_at) : "-",
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text}`} />
       ) : (
@@ -160,6 +168,7 @@ export default function UsersTable({ search, appliedFilters }) {
       accessor: "name", 
       width: "14%", 
       className: styles.name,
+      csvCell: (row) => `${row.first_name || ""} ${row.last_name || ""}`.trim() || "-",
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text}`} />
       ) : (
@@ -180,6 +189,7 @@ export default function UsersTable({ search, appliedFilters }) {
       header: "Partner", 
       accessor: "partner", 
       width: "9%",
+      csvCell: (row) => row.role === "PARTNER" ? "Yes" : "No",
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
       ) : (
@@ -282,4 +292,7 @@ export default function UsersTable({ search, appliedFilters }) {
       )}
     </>
   );
-}
+});
+
+UsersTable.displayName = "UsersTable";
+export default UsersTable;
