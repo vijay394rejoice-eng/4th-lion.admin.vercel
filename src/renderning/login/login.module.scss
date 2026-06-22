@@ -12,13 +12,33 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 
+    @include respond-to("md") {
+        padding: 16px;
+    }
+
+    @include respond-to("sm") {
+        padding: 16px;
+    }
 
     .contentBox {
         max-width: 464px;
         padding: 32px;
         width: 100%;
         background: rgba(255, 255, 255, 0.40);
+        border-radius: 16px; // Added for a softer look
+        backdrop-filter: blur(12px); // Added to make the content pop out of the background
+
+        @include respond-to("md") {
+            padding: 24px;
+        }
+
+        @include respond-to("sm") {
+            padding: 24px 16px;
+            background: rgba(255, 255, 255, 0.60);
+            border-radius: 12px;
+        }
 
         .information {
             max-width: 400px;
@@ -31,6 +51,11 @@
                 grid-template-columns: 1fr;
                 gap: 12px;
                 padding: 0 0 50px 0;
+
+                @include respond-to("sm") {
+                    padding: 0 0 30px 0;
+                    gap: 16px;
+                }
             }
 
             .errorText {

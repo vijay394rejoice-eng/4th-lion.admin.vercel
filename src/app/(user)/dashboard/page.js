@@ -1,5 +1,9 @@
+import Dashboard from "@/renderning/dashboard";
+
 export default function page() {
   return (
-    <div>page</div>
+    <div>
+      <Dashboard />
+    </div>
   )
 }

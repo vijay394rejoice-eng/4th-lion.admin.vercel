@@ -1,0 +1,176 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.dashboardDetails {
+    padding: 16px 0 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    .items {
+        .twoCol {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+
+            .card {
+                border-radius: 8px;
+                border: 1px solid rgba(0, 0, 0, 0.05);
+                background: #FFF;
+                padding: 16px;
+
+                .icon {
+                    border-radius: 6px;
+                    border: 1px solid var(--Blue, #1C61BA);
+                    background: rgba(28, 97, 186, 0.05);
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                h3 {
+                    color: var(--Text-Primary, #141414);
+                    font-family: "Plus Jakarta Sans";
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: normal;
+                    margin: 20px 0 8px 0;
+                }
+
+                p {
+                    color: var(--Text-Primary, #141414);
+                    font-size: 32px;
+                    font-weight: 700;
+                    line-height: 100%;
+                }
+            }
+        }
+
+        .bottomSection {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+
+            .sharingModelCard, .transactionsCard {
+                border-radius: 8px;
+                border: 1px solid rgba(0, 0, 0, 0.05);
+                background: #FFF;
+                padding: 20px;
+                
+                h3 {
+                    color: var(--Text-Primary, #141414);
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin: 0 0 24px 0;
+                }
+            }
+
+            .sharingModelCard {
+                .chartContainer {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .pieChart {
+                        width: 100%;
+                        max-width: 180px;
+                        height: auto;
+                        margin-bottom: 24px;
+                        
+                        text {
+                            font-family: "Plus Jakarta Sans", sans-serif;
+                        }
+                    }
+
+                    .legend {
+                        display: flex;
+                        gap: 16px;
+                        font-size: 12px;
+                        font-weight: 500;
+                        color: #141414;
+
+                        .legendItem {
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+
+                            .blueSquare, .graySquare {
+                                width: 10px;
+                                height: 10px;
+                                display: block;
+                            }
+                            .blueSquare {
+                                background: var(--Blue, #1C61BA);
+                            }
+                            .graySquare {
+                                background: #EAEAEA;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .transactionsCard {
+                .transactionList {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+
+                    .transactionItem {
+                        border-radius: 8px;
+                        background: #F7F7F7;
+                        padding: 12px 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+
+                        .row {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+
+                            h4 {
+                                color: #141414;
+                                font-size: 14px;
+                                font-weight: 600;
+                                margin: 0;
+                            }
+                            
+                            span {
+                                color: #666;
+                                font-size: 12px;
+                            }
+
+                            &.timeRow {
+                                margin-top: 4px;
+                                .time {
+                                    color: #A0A0A0;
+                                    font-size: 11px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &:first-child {
+            border-radius: 8px;
+            border: 1px solid var(--Input-Stroke, #FFF);
+            background: #FFF;
+            padding: 20px;
+
+            p {
+                color: var(--Text-Primary, #141414);
+                font-size: 16px;
+                font-weight: 600;
+                line-height: normal;
+            }
+        }
+    }
+}
