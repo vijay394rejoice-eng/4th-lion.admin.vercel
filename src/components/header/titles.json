@@ -2,7 +2,7 @@
   "/dashboard": "Dashboard",
   "/users": "Users",
   "/trades": "Trades",
-  "/commission": "Commission",
+  "/profit-sharing": "Profit Sharing",
   "/withdraw-requests": "Withdraw Requests",
   "/deposits": "Deposit Requests",
   "/dp-requests": "DP Requests",

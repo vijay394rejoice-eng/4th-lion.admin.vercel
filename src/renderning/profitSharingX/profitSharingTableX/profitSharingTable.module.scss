@@ -1,0 +1,96 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.tableContainer {
+    background: #FFF;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+
+        th {
+            color: var(--Text-Primary, #141414);
+            font-size: 14px;
+            font-weight: 700;
+            padding: 12px;
+            text-align: left;
+            font-family: var(--font-manrope);
+
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: #F8FAFC;
+        }
+
+        td {
+            padding: 12px;
+            color: var(--Text-Secondary, #555);
+            font-size: 14px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            vertical-align: middle;
+            font-family: var(--font-manrope);
+
+            white-space: nowrap;
+        }
+
+        tr:last-child>td {
+            border-bottom: none;
+        }
+    }
+
+    .actionBtn {
+        background: #F1F5F9;
+        color: var(--Text-Primary, #141414);
+        border: none;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font-manrope);
+
+        transition: 0.2s;
+
+        &:hover {
+            background: #E2E8F0;
+        }
+    }
+
+    .firstCol {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .iconBox {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        border-radius: 4px;
+        background: #FBD242;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+        margin-right: 12px;
+    }
+
+    .horizontalLine {
+        position: absolute;
+        height: 1px;
+        background-color: rgba(0, 0, 0, 0.15);
+        z-index: 1;
+        top: 50%;
+    }
+
+    .verticalLine {
+        position: absolute;
+        width: 1px;
+        background-color: rgba(0, 0, 0, 0.15);
+        z-index: 1;
+    }
+}

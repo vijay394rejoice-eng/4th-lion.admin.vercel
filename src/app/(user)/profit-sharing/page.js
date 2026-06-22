@@ -1,9 +1,10 @@
-import ProfitSharing from '@/renderning/profitSharing'
+import React from "react";
+import ProfitSharing from "@/renderning/profitSharing";
 
 export default function page() {
-    return (
-        <div>
-            <ProfitSharing />
-        </div>
-    )
+  return (
+    <div>
+      <ProfitSharing />
+    </div>
+  );
 }

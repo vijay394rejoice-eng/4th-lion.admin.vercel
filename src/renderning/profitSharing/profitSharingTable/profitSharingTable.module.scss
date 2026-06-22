@@ -1,96 +1,96 @@
 @use '../../../scss/main.scss' as *;
 @use '../../../scss/breakpoints/breakpoints.scss' as *;
 
-.tableContainer {
-    background: #FFF;
-    border-radius: 12px;
+.profitSharingTable {
+    width: 100%;
+
+    :global(th) {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    :global(td) {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+}
+
+.userIdText,
+.walletIdText {
+    display: inline-block;
+    max-width: 120px;
     overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
+.statusBadge {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-        th {
-            color: var(--Text-Primary, #141414);
-            font-size: 14px;
-            font-weight: 700;
-            padding: 12px;
-            text-align: left;
-            font-family: var(--font-manrope);
-
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            background: #F8FAFC;
-        }
-
-        td {
-            padding: 12px;
-            color: var(--Text-Secondary, #555);
-            font-size: 14px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            vertical-align: middle;
-            font-family: var(--font-manrope);
-
-            white-space: nowrap;
-        }
-
-        tr:last-child>td {
-            border-bottom: none;
-        }
+    &.pending {
+        background-color: #FEF3C7; // Amber-100
+        color: #D97706; // Amber-600
     }
 
-    .actionBtn {
-        background: #F1F5F9;
-        color: var(--Text-Primary, #141414);
-        border: none;
-        padding: 6px 16px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        font-family: var(--font-manrope);
-
-        transition: 0.2s;
-
-        &:hover {
-            background: #E2E8F0;
-        }
+    &.approved {
+        background-color: #DCFCE7; // Green-100
+        color: #15803D; // Green-700
     }
 
-    .firstCol {
-        display: flex;
-        align-items: center;
-        position: relative;
+    &.rejected {
+        background-color: #FEE2E2; // Red-100
+        color: #B91C1C; // Red-700
+    }
+}
+
+.actionBtnGroup {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+
+// Skeleton loading styles
+@keyframes skeletonPulse {
+    0% {
+        background-color: #f1f5f9;
     }
 
-    .iconBox {
-        width: 24px;
+    50% {
+        background-color: #e2e8f0;
+    }
+
+    100% {
+        background-color: #f1f5f9;
+    }
+}
+
+.skeleton {
+    display: inline-block;
+    height: 16px;
+    border-radius: 4px;
+    animation: skeletonPulse 1.5s infinite ease-in-out;
+    background-color: #f1f5f9;
+
+    &.text {
+        width: 80%;
+    }
+
+    &.short {
+        width: 45%;
+    }
+
+    &.badge {
+        width: 80px;
         height: 24px;
-        min-width: 24px;
-        border-radius: 4px;
-        background: #FBD242;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        position: relative;
-        z-index: 2;
-        margin-right: 12px;
-    }
-
-    .horizontalLine {
-        position: absolute;
-        height: 1px;
-        background-color: rgba(0, 0, 0, 0.15);
-        z-index: 1;
-        top: 50%;
-    }
-
-    .verticalLine {
-        position: absolute;
-        width: 1px;
-        background-color: rgba(0, 0, 0, 0.15);
-        z-index: 1;
+        border-radius: 100px;
     }
 }

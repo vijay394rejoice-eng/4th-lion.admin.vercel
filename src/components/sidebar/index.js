@@ -23,7 +23,7 @@ export default function Sidebar() {
     { label: 'Dashboard', path: '/dashboard', Icon: DashboardIcon },
     { label: 'Users', path: '/users', Icon: UserGroupIcon },
     { label: 'Trades', path: '/trades', Icon: TradesIcon },
-    { label: 'Commission', path: '/commission', Icon: CommissionIcon },
+    { label: 'Profit Sharing', path: '/profit-sharing', Icon: CommissionIcon },
     { label: 'Withdraw Requests', path: '/withdraw-requests', Icon: WithdrawIcon },
     { label: 'Deposits', path: '/deposits', Icon: WithdrawIcon },
     { label: 'DP Requests', path: '/dp-requests', Icon: RequestIcon },
