@@ -10,7 +10,7 @@ import AddNewSubAdmin from '@/components/addNewSubAdmin'
 export default function KycRequests() {
     return (
         <div>
-            <WithdrawRequestsCard />
+            {/* <WithdrawRequestsCard /> */}
             <KycRequestsTable />
             {/* <UserInformation/> */}
             {/* <UserInformationEdit /> */}

@@ -131,14 +131,14 @@ const ProfitSharingTable = forwardRef(
     const columns = [
       {
         header: "Date Joined",
-        accessor: "created_at",
+        accessor: "date_joined",
         width: "15%",
-        csvCell: (row) => formatDate(row.created_at),
+        csvCell: (row) => row.date_joined,
         cell: (row) =>
           row.isSkeleton ? (
             <span className={`${styles.skeleton} ${styles.text}`} />
           ) : (
-            formatDate(row.created_at)
+            row.date_joined
           ),
       },
       {
@@ -157,13 +157,13 @@ const ProfitSharingTable = forwardRef(
       {
         header: "Name",
         width: "15%",
-        csvCell: (row) => `${row.first_name || ""} ${row.last_name || ""}`.trim(),
+        csvCell: (row) => `${row.name}`.trim(),
         cell: (row) =>
           row.isSkeleton ? (
             <span className={`${styles.skeleton} ${styles.text}`} />
           ) : (
             <div style={{ fontWeight: 600 }}>
-              {row.first_name} {row.last_name}
+              {row.name}
             </div>
           ),
       },
@@ -180,13 +180,13 @@ const ProfitSharingTable = forwardRef(
       },
       {
         header: "Partner",
-        accessor: "is_partner",
+        accessor: "partner",
         width: "8%",
         cell: (row) =>
           row.isSkeleton ? (
             <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
           ) : (
-            row.is_partner || "-"
+            row.partner || "-"
           ),
       },
       {
@@ -210,19 +210,19 @@ const ProfitSharingTable = forwardRef(
           row.isSkeleton ? (
             <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
           ) : (
-            row.profit_percentage !== undefined ? `${row.profit_percentage}%` : "-"
+            row.profit_percentage !== undefined ? `${row.profit_percentage}` : "-"
           ),
       },
       {
         header: "My Share",
-        accessor: "admin_share",
+        accessor: "my_share",
         width: "13%",
-        csvCell: (row) => formatCurrency(row.admin_share),
+        csvCell: (row) => formatCurrency(row.my_share),
         cell: (row) =>
           row.isSkeleton ? (
             <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
           ) : (
-            <span style={{ fontWeight: 600 }}>{formatCurrency(row.admin_share)}</span>
+            <span style={{ fontWeight: 600 }}>{formatCurrency(row.my_share)}</span>
           ),
       },
     ];

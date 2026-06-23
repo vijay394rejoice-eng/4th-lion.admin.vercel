@@ -23,6 +23,48 @@
             justify-content: center;
         }
 
+        .cardHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0 8px 0;
+            width: 100%;
+
+            h3 {
+                color: var(--Text-Primary, #141414);
+                font-family: "Plus Jakarta Sans";
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: normal;
+                margin: 0;
+            }
+
+            .timeframeSelect {
+                appearance: none;
+                background-color: #F7F7F7;
+                border: 1px solid rgba(0, 0, 0, 0.05);
+                border-radius: 100px;
+                padding: 4px 24px 4px 10px;
+                font-family: "Plus Jakarta Sans", sans-serif;
+                font-size: 11px;
+                font-weight: 500;
+                color: #555;
+                cursor: pointer;
+                outline: none;
+                background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23555555' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 6px center;
+                background-size: 14px;
+                transition: all 0.2s;
+
+                &:hover {
+                    background-color: #EAEAEA;
+                    color: #141414;
+                }
+            }
+        }
+
         h3 {
             color: var(--Text-Primary, #141414);
             font-family: "Plus Jakarta Sans";
@@ -41,3 +83,22 @@
         }
     }
 }
+
+@keyframes skeletonPulse {
+    0% {
+        background-color: #f1f5f9;
+    }
+    50% {
+        background-color: #e2e8f0;
+    }
+    100% {
+        background-color: #f1f5f9;
+    }
+}
+
+.skeleton {
+    display: inline-block;
+    border-radius: 4px;
+    animation: skeletonPulse 1.5s infinite ease-in-out;
+    background-color: #f1f5f9;
+}

@@ -7,6 +7,7 @@ import KycPreview from "@/components/kycPreview";
 import toast from "react-hot-toast";
 import ActionHeader from "@/components/actionHeader";
 import { exportToCsv } from "@/utils/exportCsv";
+import KycActionHeader from "../kycActionHeader";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -228,7 +229,7 @@ export default function KycRequestsTable() {
 
   return (
     <>
-      <ActionHeader onExport={handleExport} />
+      <KycActionHeader onExport={handleExport} />
       <div className={styles.tableContainer}>
         <DataTable
           columns={columns}
