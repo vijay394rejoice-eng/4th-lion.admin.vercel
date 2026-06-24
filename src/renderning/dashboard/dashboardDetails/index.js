@@ -409,7 +409,7 @@ export default function DashboardDetails() {
                 <div className={styles.twoCol}>
                     <div className={styles.card}>
                         <div className={styles.icon}>
-                            <WithdrawIcon />
+                            <DolorIcon />
                         </div>
                         <h3>Pending Withdraw Requests</h3>
                         {isMetricsLoading ? (
@@ -420,7 +420,7 @@ export default function DashboardDetails() {
                     </div>
                     <div className={styles.card}>
                         <div className={styles.icon}>
-                            <WithdrawIcon />
+                            <DolorIcon />
                         </div>
                         <h3>Completed Withdraw Requests</h3>
                         {isMetricsLoading ? (

@@ -19,14 +19,14 @@ api.interceptors.request.use(async (config) => {
 
   if (typeof window !== 'undefined') {
     // Client-side: read from document.cookie
-    const match = document.cookie.match(/(?:^|;\s*)token=([^;]*)/);
+    const match = document.cookie.match(/(?:^|;\s*)(?:token|accessToken)=([^;]*)/);
     token = match ? decodeURIComponent(match[1]) : null;
   } else {
     // Server-side: read from next/headers cookies()
     try {
       const { cookies } = await import('next/headers');
       const cookieStore = await cookies();
-      token = cookieStore.get('token')?.value || null;
+      token = cookieStore.get('token')?.value || cookieStore.get('accessToken')?.value || null;
     } catch {
       // cookies() may not be available in all server contexts
       token = null;
@@ -85,8 +85,16 @@ api.interceptors.response.use(
       try {
         let refreshToken = null;
         if (typeof window !== 'undefined') {
-          const match = document.cookie.match(/(?:^|;\s*)refresh_token=([^;]*)/);
+          const match = document.cookie.match(/(?:^|;\s*)(?:refresh_token|refreshToken)=([^;]*)/);
           refreshToken = match ? decodeURIComponent(match[1]) : null;
+        } else {
+          try {
+            const { cookies } = await import('next/headers');
+            const cookieStore = await cookies();
+            refreshToken = cookieStore.get('refresh_token')?.value || cookieStore.get('refreshToken')?.value || null;
+          } catch {
+            refreshToken = null;
+          }
         }
 
         if (!refreshToken) {
@@ -101,11 +109,16 @@ api.interceptors.response.use(
         );
 
         if (res.data && res.data.status === 1) {
-          const newToken = res.data.data.access_token;
+          const newToken = res.data.data?.access_token || res.data.data?.accessToken || res.data.data?.token;
+
+          if (!newToken) {
+            throw new Error('No access token returned from refresh endpoint');
+          }
 
           // Update cookies with the new token
           if (typeof window !== 'undefined') {
-            document.cookie = `token=${encodeURIComponent(newToken)}; path=/; max-age=604800; SameSite=Lax; Secure`;
+            const isSecure = window.location.protocol === 'https:';
+            document.cookie = `token=${encodeURIComponent(newToken)}; path=/; max-age=604800; SameSite=Lax${isSecure ? '; Secure' : ''}`;
           }
 
           api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
@@ -125,7 +138,9 @@ api.interceptors.response.use(
         // Clear cookies and force redirect to login on refresh token expiration/failure
         if (typeof window !== 'undefined') {
           document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+          document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
           document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+          document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
           window.location.href = '/';
         }
 

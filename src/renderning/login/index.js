@@ -47,15 +47,19 @@ export default function Login() {
         try {
             const res = await login({ email, password });
             if (res && res.status === 1) {
-                const token = res.data.access_token;
-                const refreshToken = res.data.refresh_token;
+                const token = res.data?.access_token || res.data?.accessToken || res.data?.token;
+                const refreshToken = res.data?.refresh_token || res.data?.refreshToken;
                 
+                const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
+
                 // Save access token in cookie (valid for 7 days)
-                document.cookie = `token=${encodeURIComponent(token)}; path=/; max-age=604800; SameSite=Lax; Secure`;
+                if (token) {
+                    document.cookie = `token=${encodeURIComponent(token)}; path=/; max-age=604800; SameSite=Lax${isSecure ? '; Secure' : ''}`;
+                }
                 
                 // Save refresh token in cookie (valid for 30 days)
                 if (refreshToken) {
-                    document.cookie = `refresh_token=${encodeURIComponent(refreshToken)}; path=/; max-age=2592000; SameSite=Lax; Secure`;
+                    document.cookie = `refresh_token=${encodeURIComponent(refreshToken)}; path=/; max-age=2592000; SameSite=Lax${isSecure ? '; Secure' : ''}`;
                 }
                 
                 toast.success(res.message || 'Logged in successfully');
