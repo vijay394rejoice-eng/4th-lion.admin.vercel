@@ -34,6 +34,10 @@
             border-bottom: 1px solid rgba(0, 0, 0, 0.10);
             flex-shrink: 0;
 
+            @include respond-to("sm") {
+                padding: 16px 20px;
+            }
+
             h2 {
                 color: var(--Text-Primary, #141414);
                 font-size: 24px;
@@ -58,10 +62,18 @@
             overflow-y: auto;
             flex-grow: 1;
 
+            @include respond-to("sm") {
+                padding: 20px;
+            }
+
             .colgrid {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 gap: 16px;
+
+                @include respond-to("sm") {
+                    grid-template-columns: 1fr;
+                }
 
                 .column {
                     grid-column: span 2;
@@ -74,6 +86,10 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 16px;
+
+            @include respond-to("sm") {
+                grid-template-columns: 1fr;
+            }
             border-top: 1px solid rgba(0, 0, 0, 0.10);
             background: #FAFAFA;
             border-bottom-left-radius: 12px;

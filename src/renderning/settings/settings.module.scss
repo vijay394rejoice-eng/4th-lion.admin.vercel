@@ -11,6 +11,10 @@
         grid-template-columns: 310px 1fr;
         gap: 14px;
 
+        @include respond-to("md") {
+            grid-template-columns: 1fr;
+        }
+
         .items {
             .sidebar {
                 border-radius: 8px;

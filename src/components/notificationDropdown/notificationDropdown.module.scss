@@ -10,6 +10,13 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
+
+        @include respond-to("sm") {
+            svg {
+                width: 22px;
+                height: 22px;
+            }
+        }
     }
 }
 
@@ -26,7 +33,13 @@
     border: 1px solid rgba(0, 0, 0, 0.05);
     transform-origin: top right;
 
-
+    @include respond-to("sm") {
+        position: fixed;
+        top: 64px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+    }
 }
 
 .header {

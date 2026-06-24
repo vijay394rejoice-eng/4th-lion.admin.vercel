@@ -8,6 +8,10 @@
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 
+    @include respond-to("md") {
+        grid-template-columns: 1fr;
+    }
+
     .box {
         border-radius: var(--Radius-12, 12px);
         background: #FFF;
@@ -15,6 +19,10 @@
         .boxBody {
             padding: 32px;
             display: grid;
+
+            @include respond-to("sm") {
+                padding: 16px;
+            }
             grid-template-columns: 1fr;
             gap: 12px;
 
@@ -66,12 +74,21 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 20px;
                 padding: 8px 0 0 0;
+
+                @include respond-to("sm") {
+                    grid-template-columns: 1fr;
+                    gap: 12px;
+                }
             }
         }
 
         .boxHeader {
             border-bottom: 1px solid rgba(0, 0, 0, 0.10);
             padding: 20px 32px;
+
+            @include respond-to("sm") {
+                padding: 16px 20px;
+            }
 
             h2 {
                 color: var(--Text-Primary, #141414);

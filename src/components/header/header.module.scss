@@ -4,9 +4,15 @@
 .header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.10);
     background: #FFF;
-    padding: 13px;
+    padding: 11px 13px;
     display: flex;
     align-items: center;
+
+    @include respond-to("sm") {
+        padding: 10px 14px;
+        gap: 8px;
+    }
+
     justify-content: space-between;
     position: sticky;
     top: 0;
@@ -19,6 +25,10 @@
             font-weight: 700;
             line-height: 100%;
             letter-spacing: -0.22px;
+
+            @include respond-to("sm") {
+                font-size: 16px;
+            }
         }
     }
 
@@ -27,9 +37,19 @@
         align-items: center;
         gap: 22px;
 
+        @include respond-to("sm") {
+            gap: 12px;
+        }
+
         .user {
             width: 48px;
             height: 48px;
+
+            @include respond-to("sm") {
+                width: 36px;
+                height: 36px;
+            }
+
             border-radius: 50px;
             background: var(--Yellow, #FBD242);
             display: flex;

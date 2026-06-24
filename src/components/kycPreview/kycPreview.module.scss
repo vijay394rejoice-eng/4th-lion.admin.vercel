@@ -21,10 +21,19 @@
         width: 100%;
         box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.06), 0 8px 16px -4px rgba(20, 21, 26, 0.06);
 
+        @include respond-to("sm") {
+            width: calc(100% - 32px);
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+        }
+
         .modalheader {
             padding: 32px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.10);
 
+            @include respond-to("sm") {
+                padding: 20px;
+            }
 
             h2 {
                 color: var(--Text-Primary, #141414);
@@ -32,6 +41,10 @@
                 font-weight: 700;
                 line-height: 110%;
                 margin: 0 0 8px 0;
+
+                @include respond-to("sm") {
+                    font-size: 22px;
+                }
             }
 
             p {
@@ -48,17 +61,29 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
+
+            @include respond-to("sm") {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
         }
 
         .modalBody {
             padding: 32px;
          
+            @include respond-to("sm") {
+                padding: 20px;
+            }
 
             .twoCol {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 gap: 20px;
                 padding: 0 0 20px 0;
+
+                @include respond-to("sm") {
+                    grid-template-columns: 1fr;
+                }
 
                 p {
                     color: var(--Text-Primary, #141414);

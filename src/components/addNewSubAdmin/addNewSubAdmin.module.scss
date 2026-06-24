@@ -21,19 +21,30 @@
         width: 100%;
         box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.06), 0 8px 16px -4px rgba(20, 21, 26, 0.06);
 
+        @include respond-to("sm") {
+            width: calc(100% - 32px);
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+        }
+
         .modalheader {
             padding: 32px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.10);
 
+            @include respond-to("sm") {
+                padding: 20px;
+            }
 
             h2 {
                 color: var(--Text-Primary, #141414);
                 font-size: 28px;
                 font-weight: 700;
                 line-height: 110%;
+
+                @include respond-to("sm") {
+                    font-size: 22px;
+                }
             }
-
-
         }
 
         .buttonGrid {
@@ -46,6 +57,10 @@
             padding: 32px;
             display: grid;
             grid-template-columns: 1fr;
+
+            @include respond-to("sm") {
+                padding: 20px;
+            }
             gap: 16px;
 
             .twoCol {

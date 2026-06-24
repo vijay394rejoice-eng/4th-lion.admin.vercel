@@ -21,12 +21,26 @@ export default function Header() {
     return matchedKey ? titles[matchedKey] : 'Dashboard';
   };
 
+  const toggleSidebar = () => {
+    document.querySelector('.sidebar-layout')?.classList.toggle('active');
+    document.querySelector('.sidebar-overlay')?.classList.toggle('active');
+  };
+
   return (
     <header className={styles.header}>
-      <div className={styles.title}>
-        <h2>
-          {getTitle()}
-        </h2>
+      <div className={styles.leftAlignment} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="mobile-header-toggle" onClick={toggleSidebar}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 6H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+        </div>
+        <div className={styles.title}>
+          <h2>
+            {getTitle()}
+          </h2>
+        </div>
       </div>
       <div className={styles.rightAlignment}>
         <div className={styles.bellIcon}>

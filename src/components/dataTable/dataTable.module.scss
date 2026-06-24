@@ -61,6 +61,12 @@
 
     th {
         padding: 18px 24px; // Align horizontal padding with td
+        
+        @include respond-to("sm") {
+            padding: 14px 16px;
+            font-size: 14px;
+        }
+
         font-family: var(--font-manrope);
         color: var(--Text-Primary, #141414);
         font-size: 16px;
@@ -93,6 +99,12 @@
 
     td {
         padding: 16px 24px;
+        
+        @include respond-to("sm") {
+            padding: 12px 16px;
+            font-size: 13px;
+        }
+
         font-family: var(--font-manrope);
         font-size: 14px;
         font-weight: 500;

@@ -1,0 +1,141 @@
+@import "../scss/breakpoints/breakpoints.scss";
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+input,
+textarea,
+::placeholder,
+button {
+  font-family: var(--font-plus-jakarta);
+}
+
+.heading {
+  font-family: var(--font-montserrat);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+p:last-child {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.flex-box {
+  background: #EEF5FF;
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.sidebar-overlay {
+  display: none;
+
+  @include respond-to("md") {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+
+    &.active {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.sidebar-layout {
+  width: 274px;
+  flex-shrink: 0;
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+  z-index: 1001;
+
+  @include respond-to("md") {
+    position: fixed;
+    top: 0;
+    left: -274px;
+    height: 100vh;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+
+    &.active {
+      left: 0;
+    }
+  }
+}
+
+.children-layout {
+  width: calc(100% - 274px);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease-in-out;
+  min-width: 0; // Prevents wide children (like tables) from blowing out the flex layout
+
+  @include respond-to("md") {
+    width: 100%;
+  }
+}
+
+.children-layout-spacing {
+  padding: 14px;
+
+  @include respond-to("md") {
+    padding: 12px;
+  }
+
+  @include respond-to("sm") {
+    padding: 10px;
+  }
+}
+
+.mobile-header-toggle {
+  display: none;
+
+  @include respond-to("md") {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    background-color: #fff;
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+  }
+}

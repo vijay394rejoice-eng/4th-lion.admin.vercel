@@ -24,6 +24,16 @@
         &:active {
             transform: scale(0.98);
         }
+
+        @include respond-to("sm") {
+            width: 36px;
+            height: 36px;
+            
+            svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
     }
 }
 
@@ -40,6 +50,11 @@
     z-index: 1000;
     overflow: hidden;
     transform-origin: top right;
+
+    @include respond-to("sm") {
+        width: 240px;
+        right: -10px;
+    }
 }
 
 .profileHeader {

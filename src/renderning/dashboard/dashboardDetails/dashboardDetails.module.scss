@@ -7,11 +7,19 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 
+    @include respond-to("md") {
+        grid-template-columns: 1fr;
+    }
+
     .items {
         .twoCol {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
+
+            @include respond-to("sm") {
+                grid-template-columns: 1fr;
+            }
 
             .card {
                 border-radius: 8px;
@@ -53,6 +61,10 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
+            
+            @include respond-to("sm") {
+                grid-template-columns: 1fr;
+            }
             margin-top: 16px;
             font-family: "Plus Jakarta Sans", sans-serif;
 

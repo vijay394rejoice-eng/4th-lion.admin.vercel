@@ -19,6 +19,17 @@ const Logo = '/assets/logo/logo.svg';
 export default function Sidebar() {
   const pathname = usePathname();
 
+  // Close sidebar on route change
+  React.useEffect(() => {
+    document.querySelector('.sidebar-layout')?.classList.remove('active');
+    document.querySelector('.sidebar-overlay')?.classList.remove('active');
+  }, [pathname]);
+
+  const closeSidebar = () => {
+    document.querySelector('.sidebar-layout')?.classList.remove('active');
+    document.querySelector('.sidebar-overlay')?.classList.remove('active');
+  };
+
   const menuItems = [
     { label: 'Dashboard', path: '/dashboard', Icon: DashboardIcon },
     { label: 'Users', path: '/users', Icon: UserGroupIcon },
@@ -28,7 +39,7 @@ export default function Sidebar() {
     { label: 'Deposits', path: '/deposits', Icon: WithdrawIcon },
     { label: 'DP Requests', path: '/dp-requests', Icon: RequestIcon },
     { label: 'KYC Requests', path: '/kyc-requests', Icon: KycIcon },
-    { label: 'Send Notifications', path: '/send-notifications', Icon: CheckboxIcon },
+    { label: 'Send Notifications', path: '/notifications', Icon: CheckboxIcon },
     { label: 'Sub-Admins', path: '/sub-admins', Icon: AdminIcon },
     { label: 'Settings', path: '/settings', Icon: SettingIcon },
   ];
@@ -37,15 +48,20 @@ export default function Sidebar() {
     <aside className={styles.aside}>
       <div className={styles.logo}>
         <img src={Logo} alt='Logo' />
+        <button className={styles.closeBtn} onClick={closeSidebar}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
       </div>
       <div className={styles.asideBody}>
         {menuItems.map((item) => {
           const Icon = item.Icon;
           const isActive = pathname === item.path;
           return (
-            <Link 
-              key={item.path} 
-              href={item.path} 
+            <Link
+              key={item.path}
+              href={item.path}
               className={`${styles.menu} ${isActive ? styles.activeMenu : ''}`}
             >
               <Icon />

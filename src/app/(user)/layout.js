@@ -1,3 +1,4 @@
+'use client';
 import Header from '@/components/header'
 import Sidebar from '@/components/sidebar'
 import React from 'react'
@@ -5,6 +6,14 @@ import React from 'react'
 export default function layout({ children }) {
     return (
         <div className='flex-box'>
+            <div 
+                className="sidebar-overlay" 
+                onClick={(e) => {
+                    // Simple Vanilla JS to close sidebar
+                    document.querySelector('.sidebar-layout').classList.remove('active');
+                    e.target.classList.remove('active');
+                }}
+            ></div>
             <div className='sidebar-layout'>
                 <Sidebar />
             </div>

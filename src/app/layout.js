@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono, Manrope, Montserrat, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import "./globals.css";
+import "./globals.scss";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
