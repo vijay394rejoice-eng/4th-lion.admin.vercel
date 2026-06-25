@@ -4,7 +4,7 @@ export const getDepositRequests = (params) =>
   request(() => api.get('/admin/deposit-requests', { params }));
 
 export const approveDepositRequest = (requestId) =>
-  request(() => api.post(`/admin/deposit-requests/${requestId}/approve`));
+  request(() => api.post(`/admin/deposit-requests/${requestId}/approve`, {"remarks":"Approved"}));
 
 export const rejectDepositRequest = (requestId) =>
-  request(() => api.post(`/admin/deposit-requests/${requestId}/reject`));
+  request(() => api.post(`/admin/deposit-requests/${requestId}/reject`, {"remarks":"Rejected"}));

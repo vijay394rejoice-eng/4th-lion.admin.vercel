@@ -12,7 +12,8 @@
     z-index: 999;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    // justify-content: space-between;
+    justify-content: center;
 
     @include respond-to("sm") {
         padding: 20px;
