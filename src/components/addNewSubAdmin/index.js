@@ -179,6 +179,7 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
                     <div className={styles.twoCol}>
                         <div>
                             <Input 
+                                spacingRemove
                                 label='First Name' 
                                 placeholder='John' 
                                 value={firstName} 
@@ -190,6 +191,7 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
 
                         <div>
                             <Input 
+                                spacingRemove
                                 label='Last Name' 
                                 placeholder='Doe' 
                                 value={lastName} 

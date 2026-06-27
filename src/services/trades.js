@@ -19,3 +19,5 @@ export const deleteTrade = (tradeId) =>
 export const updateTrade = (tradeId, payload) =>
   request(() => api.patch(`/admin-trade/trades/${tradeId}`, payload));
 
+export const runSettlements = () =>
+  request(() => api.post('/admin-trade/settlements/run'));

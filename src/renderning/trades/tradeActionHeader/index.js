@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ExportIcon from '@/svg/exportIcon';
 import Button from '@/components/button';
 import PlusIcon from '@/svg/plusIcon';
-import { uploadTradesCsv } from '@/services/trades';
+import { uploadTradesCsv, runSettlements } from '@/services/trades';
 import toast from 'react-hot-toast';
 
 export default function TradeActionHeader({ onExport, onUploadSuccess, onManualEntryClick, onApplyFilters }) {
@@ -15,6 +15,7 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
     const dropdownRef = useRef(null);
     const fileInputRef = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [isSettlementRunning, setIsSettlementRunning] = useState(false);
 
     // Trade Filter states
     const [startDate, setStartDate] = useState('');
@@ -100,6 +101,23 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
             if (fileInputRef.current) {
                 fileInputRef.current.value = "";
             }
+        }
+    };
+
+    const handleSettlementClick = async () => {
+        setIsSettlementRunning(true);
+        try {
+            const res = await runSettlements();
+            if (res && res.status === 1) {
+                toast.success(res.message || "Settlement run successfully!");
+            } else {
+                toast.error(res?.message || "Failed to run settlement");
+            }
+        } catch (err) {
+            console.error("Settlement run failed:", err);
+            toast.error(err?.message || "Something went wrong while running settlement");
+        } finally {
+            setIsSettlementRunning(false);
         }
     };
 
@@ -262,6 +280,12 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
                     text="Manual Entry" 
                     primaryOutline 
                     onClick={onManualEntryClick}
+                />
+                <Button 
+                    text={isSettlementRunning ? "Running..." : "Run Settlement"} 
+                    primaryOutline 
+                    onClick={handleSettlementClick}
+                    disabled={isSettlementRunning}
                 />
             </div>
         </div>

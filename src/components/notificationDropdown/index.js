@@ -5,9 +5,19 @@ import styles from './notificationDropdown.module.scss';
 import BellIcon from '@/svg/bellIcon';
 import MegaphoneIcon from '@/svg/megaphoneIcon';
 
+import { getNotifications, markNotificationRead } from '@/services/notifications';
+
+const formatDateTime = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleString();
+};
+
 export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [notifications, setNotifications] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -20,41 +30,58 @@ export default function NotificationDropdown() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const fetchNotifications = async () => {
+    setIsLoading(true);
+    try {
+      const res = await getNotifications({ page: 1, limit: 20 });
+      const items = res?.data?.items || res?.items || res?.data || [];
+      setNotifications(Array.isArray(items) ? items : []);
+    } catch (err) {
+      console.error("Failed to fetch notifications", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const toggleDropdown = () => {
+    if (!isOpen) {
+      fetchNotifications();
+    }
     setIsOpen(!isOpen);
   };
 
-  const notifications = [
-    {
-      id: 1,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      time: "4 Minutes Ago",
-      isRead: false,
-    },
-    {
-      id: 2,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      time: "4 Minutes Ago",
-      isRead: false,
-    },
-    {
-      id: 3,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      time: "4 Minutes Ago",
-      isRead: false,
-    },
-    {
-      id: 4,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      time: "4 Minutes Ago",
-      isRead: true,
+  const unreadCount = notifications.filter(n => !n.is_read && !n.isRead).length;
+
+  const handleMarkAllRead = async () => {
+    if (unreadCount === 0) return;
+    try {
+      await markNotificationRead({ notification_ids: [], mark_all: true });
+      setNotifications(prev => prev.map(n => ({ ...n, is_read: true, isRead: true })));
+    } catch (err) {
+      console.error("Failed to mark all as read", err);
     }
-  ];
+  };
+
+  const handleRead = async (notif) => {
+    const isRead = notif?.is_read || notif?.isRead;
+    if (isRead) return;
+    try {
+      await markNotificationRead({ notification_ids: [notif.id], mark_all: false });
+      setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true, isRead: true } : n));
+    } catch (err) {
+      console.error("Failed to mark as read", err);
+    }
+  };
 
   return (
     <div className={styles.dropdownWrapper} ref={dropdownRef}>
       <div className={styles.trigger} onClick={toggleDropdown}>
         <BellIcon />
+        {unreadCount > 0 && (
+          <span className={styles.iconBadge} style={{ position: 'absolute', top: -5, right: -5, background: '#ec4343', color: '#fff', fontSize: '10px', width: '16px', height: '16px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {unreadCount > 99 ? '99+' : unreadCount}
+          </span>
+        )}
       </div>
 
       <AnimatePresence>
@@ -69,24 +96,47 @@ export default function NotificationDropdown() {
             <div className={styles.header}>
               <div className={styles.headerLeft}>
                 <h3>Notifications</h3>
-                <span className={styles.unreadBadge}>47 Unread</span>
+                <span className={styles.unreadBadge}>{unreadCount} Unread</span>
               </div>
-              <button className={styles.markReadBtn}>Mark all as read</button>
+              <button className={styles.markReadBtn} onClick={handleMarkAllRead}>Mark all as read</button>
             </div>
 
             <div className={styles.list}>
-              {notifications.map((notif) => (
-                <div key={notif.id} className={`${styles.item} ${notif.isRead ? styles.read : ''}`}>
-                  <div className={styles.iconWrapper}>
-                    <MegaphoneIcon />
-                  </div>
-                  <div className={styles.content}>
-                    <p>{notif.text}</p>
-                    <span className={styles.time}>{notif.time}</span>
-                  </div>
-                  {!notif.isRead && <div className={styles.indicator}></div>}
+              {isLoading ? (
+                <div style={{ padding: '20px', textAlign: 'center', color: '#9CA3AF', fontSize: '14px' }}>
+                  Loading notifications...
                 </div>
-              ))}
+              ) : notifications.length > 0 ? (
+                notifications.map((notif, index) => {
+                  const isRead = notif?.is_read || notif?.isRead;
+                  const title = notif?.title || '';
+                  const text = notif?.message || notif?.content || notif?.body || notif?.notification_text || 'New Notification';
+                  const time = notif?.created_at || notif?.createdAt || notif?.time || '';
+
+                  return (
+                    <div 
+                      key={notif.id || index} 
+                      className={`${styles.item} ${isRead ? styles.read : ''}`}
+                      onClick={() => handleRead(notif)}
+                      style={{ cursor: isRead ? 'default' : 'pointer' }}
+                    >
+                      <div className={styles.iconWrapper}>
+                        <MegaphoneIcon />
+                      </div>
+                      <div className={styles.content}>
+                        {title && <h4 className={styles.title} style={{ margin: '0 0 4px 0', fontSize: '15px' }}>{title}</h4>}
+                        <p>{text}</p>
+                        <span className={styles.time}>{formatDateTime(time)}</span>
+                      </div>
+                      {!isRead && <div className={styles.indicator}></div>}
+                    </div>
+                  );
+                })
+              ) : (
+                <div style={{ padding: '20px', textAlign: 'center', color: '#9CA3AF', fontSize: '14px' }}>
+                  No notifications found
+                </div>
+              )}
             </div>
           </motion.div>
         )}

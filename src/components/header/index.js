@@ -43,9 +43,9 @@ export default function Header() {
         </div>
       </div>
       <div className={styles.rightAlignment}>
-        {/* <div className={styles.bellIcon}>
+        <div className={styles.bellIcon}>
           <NotificationDropdown />
-        </div> */}
+        </div>
         <ProfileDropdown />
       </div>
     </header>

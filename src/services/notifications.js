@@ -8,3 +8,9 @@ export const sendAdminNotification = (formData) =>
       },
     })
   );
+
+export const getNotifications = (params) =>
+  request(() => api.get('/notifications', { params }));
+
+export const markNotificationRead = (payload) =>
+  request(() => api.post('/notifications/read', payload));
