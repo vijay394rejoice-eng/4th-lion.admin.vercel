@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './sidebar.module.scss';
 import DashboardIcon from '@/svg/dashboardIcon';
@@ -18,6 +18,7 @@ const Logo = '/assets/logo/logo.svg';
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   // Close sidebar on route change
   React.useEffect(() => {
@@ -47,7 +48,7 @@ export default function Sidebar() {
   return (
     <aside className={styles.aside}>
       <div className={styles.logo}>
-        <img src={Logo} alt='Logo' />
+        <img src={Logo} alt='Logo' onClick={() =>  router.push("/dashboard")} />
         <button className={styles.closeBtn} onClick={closeSidebar}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

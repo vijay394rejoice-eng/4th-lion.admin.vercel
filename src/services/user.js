@@ -8,3 +8,6 @@ export const blockUser = (userId) =>
 
 export const unblockUser = (userId) =>
   request(() => api.post(`/admin/users/${userId}/unblock`));
+
+export const activatePendingUsers = () =>
+  request(() => api.post('/admin/activate-pending'));
