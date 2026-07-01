@@ -3,10 +3,10 @@ import React from 'react'
 export default function TransactionsIcon() {
   return (
    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-  <path d="M12 2.25L15 5.25L12 8.25" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M15 5.25H3" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M6 15.75L3 12.75L6 9.75" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M3 12.75H15" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 2.25L15 5.25L12 8.25" stroke="#555555" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  <path d="M15 5.25H3" stroke="#555555" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  <path d="M6 15.75L3 12.75L6 9.75" stroke="#555555" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  <path d="M3 12.75H15" stroke="#555555" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
 </svg>
   )
 }

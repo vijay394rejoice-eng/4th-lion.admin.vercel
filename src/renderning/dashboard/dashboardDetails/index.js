@@ -469,7 +469,7 @@ export default function DashboardDetails() {
                                     <span className={styles.blueSquare}></span> Investor {!isSharingModelLoading && `(${investorPct}%)`}
                                 </div>
                                 <div className={styles.legendItem}>
-                                    <span className={styles.graySquare}></span> IB {!isSharingModelLoading && `(${ibPct}%)`}
+                                    <span className={styles.graySquare}></span> DP{!isSharingModelLoading && `(${ibPct}%)`}
                                 </div>
                                 <div className={styles.legendItem}>
                                     <span className={styles.blueSquare}></span> Company {!isSharingModelLoading && `(${companyPct}%)`}

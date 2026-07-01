@@ -39,8 +39,22 @@ const cardsConfig = [
     hasTimeframe: true,
   },
   {
+    key: 'company_profit',
+    title: 'Company Profit',
+    icon: <DolorIcon />,
+    isCurrency: true,
+    hasTimeframe: false,
+  },
+  {
     key: 'total_users',
     title: 'Total Users',
+    icon: <DolorIcon />,
+    isCurrency: false,
+    hasTimeframe: false,
+  },
+    {
+    key: 'total_partners',
+    title: 'Total Partners',
     icon: <DolorIcon />,
     isCurrency: false,
     hasTimeframe: false,

@@ -3,7 +3,7 @@
 
 .dashboardCardList {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 16px;
 
     @include respond-to("md") {
@@ -60,7 +60,7 @@
                 color: #555;
                 cursor: pointer;
                 outline: none;
-                background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23555555' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+                background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23555555' strokeLinecap='round' strokeLinejoin='round' strokeWidth='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
                 background-repeat: no-repeat;
                 background-position: right 6px center;
                 background-size: 14px;
@@ -109,4 +109,4 @@
     border-radius: 4px;
     animation: skeletonPulse 1.5s infinite ease-in-out;
     background-color: #f1f5f9;
-}
+}

@@ -65,7 +65,7 @@ export default function Header() {
       </div>
       <div className={styles.rightAlignment} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <Button 
-            text={isActivating ? "Activating..." : "Activate  "} 
+            text={isActivating ? "Activating..." : "Activate Investment Amount"} 
             primaryOutline 
             onClick={handleActivatePending}
             disabled={isActivating}
