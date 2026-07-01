@@ -494,6 +494,7 @@ export default function DashboardDetails() {
                                         </div>
                                         <div className={`${styles.row} ${styles.timeRow}`}>
                                             <span className={styles.skeleton} style={{ width: '70px', height: '11px' }} />
+                                            <span className={styles.skeleton} style={{ width: '50px', height: '11px' }} />
                                         </div>
                                     </div>
                                 ))
@@ -514,6 +515,13 @@ export default function DashboardDetails() {
                                         </div>
                                         <div className={`${styles.row} ${styles.timeRow}`}>
                                             <span className={styles.time}>{timeAgo(tx.created_at)}</span>
+                                            <span style={{
+                                                fontSize: '11px',
+                                                fontWeight: '600',
+                                                color: tx.status === 'SUCCESS' ? '#00C853' : tx.status === 'PENDING' ? '#FFB300' : tx.status === 'REJECTED' ? '#F44336' : '#666'
+                                            }}>
+                                                {tx.status ? tx.status.charAt(0).toUpperCase() + tx.status.slice(1).toLowerCase() : ''}
+                                            </span>
                                         </div>
                                     </div>
                                 ))
