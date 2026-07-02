@@ -140,3 +140,10 @@
         box-shadow: none;
     }
 }
+
+.nameCell {
+    white-space: normal;
+    word-break: break-word;
+    min-width: 120px;
+    padding-right: 4px;
+}

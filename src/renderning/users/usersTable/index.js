@@ -172,7 +172,9 @@ const UsersTable = forwardRef(({ search, appliedFilters }, ref) => {
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text}`} />
       ) : (
-        `${row.first_name || ""} ${row.last_name || ""}`.trim() || "-"
+        <div className={styles.nameCell} title={`${row.first_name || ""} ${row.last_name || ""}`}>
+          {`${row.first_name || ""} ${row.last_name || ""}`.trim() || "-"}
+        </div>
       )
     },
     { 
@@ -287,6 +289,7 @@ const UsersTable = forwardRef(({ search, appliedFilters }, ref) => {
           currentPage={currentPage}
           totalItems={totalItems}
           onPageChange={handlePageChange}
+          minWidth="1300px"
         />
       </div>
 

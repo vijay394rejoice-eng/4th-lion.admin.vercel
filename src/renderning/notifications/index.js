@@ -142,6 +142,17 @@ export default function Notifications() {
             toast.error("Please upload an image for the popup");
             return;
         }
+        if (popupUrl.trim()) {
+            try {
+                const urlObj = new URL(popupUrl.trim());
+                if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+                    throw new Error();
+                }
+            } catch (_) {
+                toast.error("Please enter a valid URL (e.g., https://example.com)");
+                return;
+            }
+        }
 
         setIsSendingPopup(true);
         try {
