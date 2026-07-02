@@ -20,16 +20,19 @@
         max-width: 444px;
         width: 100%;
         box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.06), 0 8px 16px -4px rgba(20, 21, 26, 0.06);
+        max-height: 90dvh;
+        display: flex;
+        flex-direction: column;
 
         @include respond-to("sm") {
             width: calc(100% - 32px);
-            max-height: calc(100vh - 32px);
-            overflow-y: auto;
+            max-height: calc(100dvh - 32px);
         }
 
         .modalheader {
             padding: 32px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+            flex-shrink: 0;
 
             @include respond-to("sm") {
                 padding: 20px;
@@ -57,11 +60,32 @@
             padding: 32px;
             display: grid;
             grid-template-columns: 1fr;
+            gap: 16px;
+            overflow-y: auto;
+
+            // Firefox scrollbar customizations
+            scrollbar-width: thin;
+            scrollbar-color: #CBD5E1 transparent;
+
+            // Webkit scrollbar customizations
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+            &::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            &::-webkit-scrollbar-thumb {
+                background: #CBD5E1;
+                border-radius: 100px;
+
+                &:hover {
+                    background: #94A3B8;
+                }
+            }
 
             @include respond-to("sm") {
                 padding: 20px;
             }
-            gap: 16px;
 
             .twoCol {
                 display: grid;

@@ -11,3 +11,6 @@ export const updateSubAdmin = (userId, payload) =>
 
 export const deleteSubAdmin = (userId) =>
   request(() => api.delete(`/admin/sub-admin/${userId}`));
+
+export const getSubAdminPermissions = () =>
+  request(() => api.get('/admin/sub-admin/permissions'));

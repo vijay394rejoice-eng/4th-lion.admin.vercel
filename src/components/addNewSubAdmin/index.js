@@ -1,9 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './addNewSubAdmin.module.scss';
 import Button from '../button';
 import Input from '../input';
-import { createSubAdmin, updateSubAdmin, deleteSubAdmin } from '@/services/subAdmin';
+import { createSubAdmin, updateSubAdmin, deleteSubAdmin, getSubAdminPermissions } from '@/services/subAdmin';
 import toast from 'react-hot-toast';
 import LogoutModal from '../logoutModal';
 
@@ -12,15 +12,6 @@ const Close = 'assets/icons/close.svg';
 const EmailIcon = 'assets/icons/email.svg';
 const LockIcon = 'assets/icons/lock.svg';
 const EyeIcon = 'assets/icons/eye.svg';
-
-const ACCESS_OPTIONS = [
-    { id: 'dashboard', label: 'Access Dashboard Overview' },
-    { id: 'users', label: 'Manage Users' },
-    { id: 'withdraw', label: 'Manage Withdraw Requests' },
-    { id: 'ib', label: 'Manage IB Requests' },
-    { id: 'notifications', label: 'Send Notifications' },
-    { id: 'kyc', label: 'Manage KYC Requests' },
-];
 
 export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) {
     const isEditMode = subAdmin !== null;
@@ -41,14 +32,33 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
 
     const isLoading = isSubmitting || isDeleting;
 
-    // ACCESS_OPTIONS state (Design remains as is, but skipped in API submission)
-    const [selectedAccess, setSelectedAccess] = useState(['users']);
+    // Permissions states
+    const [selectedAccess, setSelectedAccess] = useState(subAdmin?.permissions || []);
+    const [permissionsList, setPermissionsList] = useState([]);
+    const [isLoadingPermissions, setIsLoadingPermissions] = useState(true);
 
-    const handleToggle = (id) => {
-        if (selectedAccess.includes(id)) {
-            setSelectedAccess(selectedAccess.filter(item => item !== id));
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const res = await getSubAdminPermissions();
+                if (res && res.status === 1) {
+                    setPermissionsList(res.data || []);
+                }
+            } catch (err) {
+                console.error("Failed to load permissions:", err);
+                toast.error("Failed to load permissions list");
+            } finally {
+                setIsLoadingPermissions(false);
+            }
+        };
+        fetchPermissions();
+    }, []);
+
+    const handleToggle = (value) => {
+        if (selectedAccess.includes(value)) {
+            setSelectedAccess(selectedAccess.filter(item => item !== value));
         } else {
-            setSelectedAccess([...selectedAccess, id]);
+            setSelectedAccess([...selectedAccess, value]);
         }
     };
 
@@ -107,6 +117,7 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
                 first_name: firstName.trim(),
                 last_name: lastName.trim(),
                 email: email.trim(),
+                permissions: selectedAccess,
             };
             
             if (isEditMode) {
@@ -247,35 +258,41 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
                         </div>
                     </div>
 
-                    {/* <div className={styles.allCheckboxtext}>
+                    <div className={styles.allCheckboxtext}>
                         <p>
                             Access
                         </p>
                         <div className={styles.checkboxList}>
-                            {ACCESS_OPTIONS.map((option) => {
-                                const isChecked = selectedAccess.includes(option.id);
-                                return (
-                                    <label key={option.id} className={styles.checkboxItem}>
-                                        <input
-                                            type="checkbox"
-                                            checked={isChecked}
-                                            onChange={() => handleToggle(option.id)}
-                                            className={styles.hiddenCheckbox}
-                                            disabled={isLoading}
-                                        />
-                                        <div className={`${styles.customCheckbox} ${isChecked ? styles.checked : ''}`}>
-                                            {isChecked && (
-                                                <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M1.5 4L4 6.5L8.5 1.5" stroke="#141414" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                </svg>
-                                            )}
-                                        </div>
-                                        <span className={styles.checkboxLabel}>{option.label}</span>
-                                    </label>
-                                );
-                            })}
+                            {isLoadingPermissions ? (
+                                <p style={{ fontSize: '14px', color: '#64748B' }}>Loading permissions...</p>
+                            ) : permissionsList.length > 0 ? (
+                                permissionsList.map((option) => {
+                                    const isChecked = selectedAccess.includes(option.value);
+                                    return (
+                                        <label key={option.value} className={styles.checkboxItem}>
+                                            <input
+                                                type="checkbox"
+                                                checked={isChecked}
+                                                onChange={() => handleToggle(option.value)}
+                                                className={styles.hiddenCheckbox}
+                                                disabled={isLoading}
+                                            />
+                                            <div className={`${styles.customCheckbox} ${isChecked ? styles.checked : ''}`}>
+                                                {isChecked && (
+                                                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M1.5 4L4 6.5L8.5 1.5" stroke="#141414" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                )}
+                                            </div>
+                                            <span className={styles.checkboxLabel}>{option.label}</span>
+                                        </label>
+                                    );
+                                })
+                            ) : (
+                                <p style={{ fontSize: '14px', color: '#EF4444' }}>No permissions found</p>
+                            )}
                         </div>
-                    </div> */}
+                    </div>
 
                     {isEditMode && (
                         <div className={styles.allCheckboxtext} style={{ marginTop: '4px' }}>
@@ -319,7 +336,7 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
                                 onClick={handleDeleteClick}
                                 disabled={isLoading}
                                 type="button"
-                            />
+                             />
                         )}
                         <Button 
                             icon={Close} 
