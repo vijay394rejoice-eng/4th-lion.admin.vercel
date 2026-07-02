@@ -5,15 +5,23 @@ import SearchIcon from '@/svg/searchIcon';
 import FilterIcon from '@/svg/filterIcon';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExportIcon from '@/svg/exportIcon';
+import classNames from 'classnames';
 
-export default function KycActionHeader({ onExport }) {
+export default function KycActionHeader({
+    onExport,
+    search = "",
+    onSearchChange,
+    status = "",
+    onStatusChange,
+}) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
-    // Filter states
-    const [statusFilters, setStatusFilters] = useState([]); // ['active', 'inactive', 'pending']
-    const [roleFilters, setRoleFilters] = useState([]);     // ['admin', 'editor', 'viewer', 'guest']
-    const [lastActive, setLastActive] = useState('all');    // 'all', 'today', '7days', '30days'
+    // Local filter state inside the dropdown (committed on "Apply")
+    const [localStatus, setLocalStatus] = useState("all");
+
+    // Local search state for immediate typing feedback
+    const [localSearch, setLocalSearch] = useState(search);
 
     // Close on click outside
     useEffect(() => {
@@ -26,46 +34,50 @@ export default function KycActionHeader({ onExport }) {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // Sync local search with parent search (e.g. if cleared externally)
+    useEffect(() => {
+        setLocalSearch(search);
+    }, [search]);
+
+    // Debounce effect for search input (500ms)
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            onSearchChange(localSearch);
+        }, 500);
+        return () => clearTimeout(handler);
+    }, [localSearch, onSearchChange]);
+
+    // Sync dropdown filter with applied filters when the dropdown opens
+    useEffect(() => {
+        if (isOpen) {
+            setLocalStatus(status || "all");
+        }
+    }, [isOpen, status]);
+
     const toggleDropdown = () => setIsOpen(!isOpen);
 
-    const handleStatusToggle = (status) => {
-        setStatusFilters(prev =>
-            prev.includes(status)
-                ? prev.filter(s => s !== status)
-                : [...prev, status]
-        );
-    };
-
-    const handleRoleToggle = (role) => {
-        setRoleFilters(prev =>
-            prev.includes(role)
-                ? prev.filter(r => r !== role)
-                : [...prev, role]
-        );
-    };
-
     const handleReset = () => {
-        setStatusFilters([]);
-        setRoleFilters([]);
-        setLastActive('all');
+        setLocalStatus("all");
     };
 
     const handleApply = () => {
-        console.log('Applied Filters:', {
-            status: statusFilters,
-            roles: roleFilters,
-            lastActive
-        });
+        onStatusChange(localStatus === "all" ? "" : localStatus);
         setIsOpen(false);
     };
 
-    const activeCount = statusFilters.length + roleFilters.length + (lastActive !== 'all' ? 1 : 0);
-    const isFilterApplied = activeCount > 0;
+    const isAppliedFilterPresent = status && status !== "all";
+    const appliedCount = isAppliedFilterPresent ? 1 : 0;
+    const isLocalFilterApplied = localStatus !== "all";
 
     return (
         <div className={styles.kycActionHeader}>
             <div className={styles.searchbar}>
-                <input type='text' placeholder='Search' />
+                <input
+                    type='text'
+                    placeholder='Search'
+                    value={localSearch}
+                    onChange={(e) => setLocalSearch(e.target.value)}
+                />
                 <div className={styles.searchIcon}>
                     <SearchIcon />
                 </div>
@@ -73,14 +85,14 @@ export default function KycActionHeader({ onExport }) {
             <div className={styles.rightContentAlignment}>
                 <div className={styles.filterWrapper} ref={dropdownRef}>
                     <button
-                        className={`${styles.filterBtn} ${isOpen ? styles.active : ''} ${isFilterApplied ? styles.hasFilters : ''}`}
+                        className={`${styles.filterBtn} ${isOpen ? styles.active : ''} ${isAppliedFilterPresent ? styles.hasFilters : ''}`}
                         onClick={toggleDropdown}
                     >
                         Filters
                         <div className={styles.iconBox}>
                             <FilterIcon />
                             <AnimatePresence>
-                                {isFilterApplied && (
+                                {isAppliedFilterPresent && (
                                     <motion.span
                                         className={styles.filterBadge}
                                         initial={{ scale: 0 }}
@@ -88,7 +100,7 @@ export default function KycActionHeader({ onExport }) {
                                         exit={{ scale: 0 }}
                                         transition={{ type: "spring", stiffness: 500, damping: 25 }}
                                     >
-                                        {activeCount}
+                                        {appliedCount}
                                     </motion.span>
                                 )}
                             </AnimatePresence>
@@ -106,7 +118,7 @@ export default function KycActionHeader({ onExport }) {
                             >
                                 <div className={styles.dropdownHeader}>
                                     <h3>Filters</h3>
-                                    {isFilterApplied && (
+                                    {isLocalFilterApplied && (
                                         <button className={styles.resetBtn} onClick={handleReset}>
                                             Reset All
                                         </button>
@@ -118,86 +130,26 @@ export default function KycActionHeader({ onExport }) {
                                     <div className={styles.filterSection}>
                                         <h4 className={styles.sectionTitle}>Status</h4>
                                         <div className={styles.statusGroup}>
-                                            {['Active', 'Inactive', 'Pending'].map((status) => {
-                                                const lower = status.toLowerCase();
-                                                const isActive = statusFilters.includes(lower);
+                                            {['all', 'PENDING', 'APPROVED', 'REJECTED'].map((statusOption) => {
+                                                const isActive = localStatus === statusOption;
+                                                const isPending = statusOption === 'PENDING';
+                                                const isApproved = statusOption === 'APPROVED';
+                                                const isRejected = statusOption === 'REJECTED';
+                                                const isAll = statusOption === 'all';
+                                                
                                                 return (
                                                     <button
-                                                        key={status}
-                                                        className={`${styles.statusPill} ${styles[lower]} ${isActive ? styles.active : ''}`}
-                                                        onClick={() => handleStatusToggle(lower)}
+                                                        key={statusOption}
+                                                        className={classNames(styles.statusPill, {
+                                                            [styles.active]: isActive,
+                                                            [styles.pending]: isPending && isActive,
+                                                            [styles.inactive]: isRejected && isActive,
+                                                            [styles.all]: isAll && isActive,
+                                                        })}
+                                                        onClick={() => setLocalStatus(statusOption)}
                                                     >
-                                                        {status}
+                                                        {statusOption === 'all' ? 'All' : statusOption.charAt(0) + statusOption.slice(1).toLowerCase()}
                                                     </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-
-                                    {/* Role Section */}
-                                    <div className={styles.filterSection}>
-                                        <h4 className={styles.sectionTitle}>User Role</h4>
-                                        <div className={styles.checkboxGroup}>
-                                            {['Admin', 'Editor', 'Viewer', 'Guest'].map((role) => {
-                                                const lower = role.toLowerCase();
-                                                const isActive = roleFilters.includes(lower);
-                                                return (
-                                                    <div
-                                                        key={role}
-                                                        className={`${styles.checkboxItem} ${isActive ? styles.active : ''}`}
-                                                        onClick={() => handleRoleToggle(lower)}
-                                                    >
-                                                        <div className={styles.customCheck}>
-                                                            {isActive && (
-                                                                <motion.svg
-                                                                    viewBox="0 0 24 24"
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    strokeWidth="3"
-                                                                    initial={{ scale: 0 }}
-                                                                    animate={{ scale: 1 }}
-                                                                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                                                                >
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                                                </motion.svg>
-                                                            )}
-                                                        </div>
-                                                        <span className={styles.checkboxLabel}>{role}</span>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-
-                                    {/* Last Active Section */}
-                                    <div className={styles.filterSection}>
-                                        <h4 className={styles.sectionTitle}>Last Active</h4>
-                                        <div className={styles.radioGroup}>
-                                            {[
-                                                { label: 'All Time', value: 'all' },
-                                                { label: 'Today', value: 'today' },
-                                                { label: 'Last 7 Days', value: '7days' },
-                                                { label: 'Last 30 Days', value: '30days' }
-                                            ].map((option) => {
-                                                const isActive = lastActive === option.value;
-                                                return (
-                                                    <div
-                                                        key={option.value}
-                                                        className={`${styles.radioItem} ${isActive ? styles.active : ''}`}
-                                                        onClick={() => setLastActive(option.value)}
-                                                    >
-                                                        <div className={styles.customRadio}>
-                                                            {isActive && (
-                                                                <motion.div
-                                                                    className={styles.radioInner}
-                                                                    initial={{ scale: 0 }}
-                                                                    animate={{ scale: 1 }}
-                                                                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                        <span className={styles.radioLabel}>{option.label}</span>
-                                                    </div>
                                                 );
                                             })}
                                         </div>

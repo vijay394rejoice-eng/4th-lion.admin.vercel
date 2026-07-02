@@ -37,6 +37,7 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [filters, setFilters] = useState({});
+  const [search, setSearch] = useState("");
   
   // Modal control states
   const [confirmType, setConfirmType] = useState(null); // 'approve' | 'reject' | null
@@ -48,7 +49,11 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
     setIsLoading(true);
     if (onLoadStart) onLoadStart();
     try {
-      const res = await getPartnerRequests({ page, limit: pageSize, ...filters });
+      const params = { page, limit: pageSize, ...filters };
+      if (search) {
+        params.search = search;
+      }
+      const res = await getPartnerRequests(params);
       if (res && res.status === 1) {
         setData(res.data?.items || []);
         setTotalItems(res.data?.total || 0);
@@ -68,10 +73,20 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
 
   useEffect(() => {
     fetchPartnerRequests(currentPage);
-  }, [currentPage, filters]);
+  }, [currentPage, filters, search]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleSearchChange = (newSearch) => {
+    setSearch(newSearch);
+    setCurrentPage(1);
+  };
+
+  const handleApplyFilters = (newFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
   };
 
   const handleActionClick = (request, type) => {
@@ -250,8 +265,10 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
   return (
     <>
       <DPRequestsActionHeader 
-        onApplyFilters={setFilters} 
+        onApplyFilters={handleApplyFilters} 
         onExport={handleExport} 
+        search={search}
+        onSearchChange={handleSearchChange}
       />
       <div className={styles.tableContainer}>
         <DataTable

@@ -185,15 +185,26 @@ const UsersTable = forwardRef(({ search, appliedFilters }, ref) => {
         row.email
       )
     },
-    { 
-      header: "Partner", 
-      accessor: "partner", 
+    // { 
+    //   header: "role", 
+    //   accessor: "partner", 
+    //   width: "9%",
+    //   csvCell: (row) => row.role === "PARTNER" ? "Yes" : "No",
+    //   cell: (row) => row.isSkeleton ? (
+    //     <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
+    //   ) : (
+    //     row.role === "PARTNER" ? "Yes" : "No"
+    //   )
+    // },
+        { 
+      header: "Role", 
+      accessor: "role", 
       width: "9%",
-      csvCell: (row) => row.role === "PARTNER" ? "Yes" : "No",
+      csvCell: (row) => row.role,
       cell: (row) => row.isSkeleton ? (
         <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
       ) : (
-        row.role === "PARTNER" ? "Yes" : "No"
+        row.role
       )
     },
     { 

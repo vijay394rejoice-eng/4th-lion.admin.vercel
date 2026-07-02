@@ -178,15 +178,26 @@ const ProfitSharingTable = forwardRef(
             row.email
           ),
       },
+      // {
+      //   header: "Partner",
+      //   accessor: "partner",
+      //   width: "8%",
+      //   cell: (row) =>
+      //     row.isSkeleton ? (
+      //       <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
+      //     ) : (
+      //       row.partner || "-"
+      //     ),
+      // },
       {
-        header: "Partner",
-        accessor: "partner",
+        header: "Role",
+        accessor: "role",
         width: "8%",
         cell: (row) =>
           row.isSkeleton ? (
             <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
           ) : (
-            row.partner || "-"
+            row.role || "-"
           ),
       },
       {

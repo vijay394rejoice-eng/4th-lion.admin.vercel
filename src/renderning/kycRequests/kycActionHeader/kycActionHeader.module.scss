@@ -233,6 +233,12 @@
                         border-color: #F59E0B;
                         color: #B45309;
                     }
+
+                    &.all {
+                        background: rgba(27, 89, 248, 0.08);
+                        border-color: #1B59F8;
+                        color: #1B59F8;
+                    }
                 }
             }
         }

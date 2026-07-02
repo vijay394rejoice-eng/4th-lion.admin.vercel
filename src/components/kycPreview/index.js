@@ -9,6 +9,7 @@ const RightIcon = 'assets/icons/right.svg';
 const Close = 'assets/icons/close.svg';
 
 export default function KycPreview({ request, onClose, onApprove, onReject, isSubmitting }) {
+    console.log("🚀 ~ KycPreview ~ request:", request)
     const [remarks, setRemarks] = useState('');
 
     if (!request) return null;
@@ -88,30 +89,53 @@ export default function KycPreview({ request, onClose, onApprove, onReject, isSu
                         </div>
                     </div>
                     
-                    <div style={{ marginBottom: '24px' }}>
-                        <Input 
-                            label="Remarks"
-                            placeholder="Enter approval/rejection remarks..."
-                            value={remarks}
-                            onChange={(e) => setRemarks(e.target.value)}
-                            disabled={isSubmitting}
-                        />
-                    </div>
+                    {request.status === "PENDING" ? (
+                        <div style={{ marginBottom: '24px' }}>
+                            <Input 
+                                label="Remarks"
+                                placeholder="Enter approval/rejection remarks..."
+                                value={remarks}
+                                onChange={(e) => setRemarks(e.target.value)}
+                                disabled={isSubmitting}
+                            />
+                        </div>
+                    ) : (
+                        request.remarks && (
+                            <div style={{ marginBottom: '24px' }}>
+                                <Input 
+                                    label="Remarks"
+                                    value={request.remarks}
+                                    disabled
+                                />
+                            </div>
+                        )
+                    )}
 
                     <div className={styles.buttonGrid}>
-                        <Button 
-                            icon={RightIcon} 
-                            text={isSubmitting ? "Approving..." : "Approve KYC"} 
-                            onClick={handleApproveClick}
-                            disabled={isSubmitting}
-                        />
-                        <Button 
-                            icon={Close} 
-                            text={isSubmitting ? "Rejecting..." : "Reject KYC"} 
-                            primaryOutline 
-                            onClick={handleRejectClick}
-                            disabled={isSubmitting}
-                        />
+                        {request.status === "PENDING" ? (
+                            <>
+                                <Button 
+                                    icon={RightIcon} 
+                                    text={isSubmitting ? "Approving..." : "Approve KYC"} 
+                                    onClick={handleApproveClick}
+                                    disabled={isSubmitting}
+                                />
+                                <Button 
+                                    icon={Close} 
+                                    text={isSubmitting ? "Rejecting..." : "Reject KYC"} 
+                                    primaryOutline 
+                                    onClick={handleRejectClick}
+                                    disabled={isSubmitting}
+                                />
+                            </>
+                        ) : (
+                            <div className={styles.singleButton}>
+                                <Button 
+                                    text="Close" 
+                                    onClick={onClose}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

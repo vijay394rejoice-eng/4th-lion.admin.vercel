@@ -60,66 +60,6 @@
     min-width: 900px; // Lock minimum width to trigger overflow-x scroll on the wrapper
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    text-align: left;
-    table-layout: fixed; // Ensures absolute column alignment between separate tables
-}
-
-.thead {
-    background: #FFF;
-
-    th {
-        padding: 18px 24px; // Align horizontal padding with td
-        font-family: var(--font-manrope);
-        color: var(--Text-Primary, #141414);
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-        white-space: nowrap;
-        border: none;
-    }
-}
-
-.tbody {
-    tr {
-        background: #FFF;
-        border-bottom: 1px solid #F1F5F9; // Separators inside the body card
-        transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-
-        &:hover {
-            background-color: #F8FAFC;
-        }
-
-        &:last-child {
-            border-bottom: none;
-        }
-    }
-
-    td {
-        padding: 16px 24px;
-        font-family: var(--font-manrope);
-        font-size: 14px;
-        font-weight: 500;
-        color: #475569; // Slate-600
-        line-height: normal;
-        vertical-align: middle;
-        white-space: nowrap;
-
-        &.name {
-            color: #0F172A; // Slate-900 for Name
-            font-weight: 600;
-        }
-
-        &.profit {
-            color: #0F172A; // Slate-900 for Profit
-            font-weight: 600;
-        }
-    }
-}
 
 .userIdText {
     display: inline-block;
@@ -269,5 +209,35 @@
     :global(td) {
         padding-left: 12px !important;
         padding-right: 12px !important;
+    }
+}
+
+.remarksCell {
+    white-space: normal;
+    word-break: break-word;
+    max-height: 80px;
+    overflow-y: auto;
+    min-width: 150px;
+    padding-right: 4px;
+
+    // Firefox scrollbar customizations
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 transparent;
+
+    // Webkit scrollbar customizations
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 4px;
+
+        &:hover {
+            background: #94A3B8;
+        }
     }
 }

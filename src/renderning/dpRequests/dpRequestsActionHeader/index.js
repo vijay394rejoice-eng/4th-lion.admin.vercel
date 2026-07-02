@@ -6,12 +6,20 @@ import FilterIcon from "@/svg/filterIcon";
 import { motion, AnimatePresence } from "framer-motion";
 import ExportIcon from "@/svg/exportIcon";
 
-export default function DPRequestsActionHeader({ onExport, onApplyFilters }) {
+export default function DPRequestsActionHeader({
+  onExport,
+  onApplyFilters,
+  search = "",
+  onSearchChange,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   // Filter states
   const [statusFilter, setStatusFilter] = useState(""); // "" (All), "PENDING", "APPROVED"
+
+  // Local search state for immediate typing feedback
+  const [localSearch, setLocalSearch] = useState(search);
 
   // Close on click outside
   useEffect(() => {
@@ -23,6 +31,21 @@ export default function DPRequestsActionHeader({ onExport, onApplyFilters }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Sync local search with parent search (e.g. if cleared externally)
+  useEffect(() => {
+    setLocalSearch(search);
+  }, [search]);
+
+  // Debounce effect for search input (500ms)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (onSearchChange) {
+        onSearchChange(localSearch);
+      }
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [localSearch, onSearchChange]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -46,7 +69,12 @@ export default function DPRequestsActionHeader({ onExport, onApplyFilters }) {
   return (
     <div className={styles.dpRequestsActionHeader}>
       <div className={styles.searchbar}>
-        <input type="text" placeholder="Search" />
+        <input
+          type="text"
+          placeholder="Search"
+          value={localSearch}
+          onChange={(e) => setLocalSearch(e.target.value)}
+        />
         <div className={styles.searchIcon}>
           <SearchIcon />
         </div>
@@ -106,6 +134,7 @@ export default function DPRequestsActionHeader({ onExport, onApplyFilters }) {
                       <option value="">All Status</option>
                       <option value="PENDING">Pending</option>
                       <option value="APPROVED">Approved</option>
+                      <option value="REJECTED">Rejected</option>
                     </select>
                   </div>
                 </div>

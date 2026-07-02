@@ -30,7 +30,6 @@ const formatDate = (dateString) => {
     return dateString;
   }
 };
-
 export default function KycRequestsTable() {
   const [data, setData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
@@ -38,6 +37,8 @@ export default function KycRequestsTable() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
   console.log("KYC Requests data:", selectedRequest); // Debug log to check data structure
 
   const handleApprove = async (requestId, remarks) => {
@@ -83,7 +84,14 @@ export default function KycRequestsTable() {
   const fetchKycRequests = async (page) => {
     setIsLoading(true);
     try {
-      const res = await getKYCRequests({ page, limit: pageSize });
+      const params = { page, limit: pageSize };
+      if (search) {
+        params.search = search;
+      }
+      if (status) {
+        params.status = status;
+      }
+      const res = await getKYCRequests(params);
       if (res && res.status === 1) {
         setData(res.data?.items || []);
         setTotalItems(res.data?.total || 0);
@@ -97,7 +105,17 @@ export default function KycRequestsTable() {
 
   useEffect(() => {
     fetchKycRequests(currentPage);
-  }, [currentPage]);
+  }, [currentPage, search, status]);
+
+  const handleSearchChange = (newSearch) => {
+    setSearch(newSearch);
+    setCurrentPage(1);
+  };
+
+  const handleStatusChange = (newStatus) => {
+    setStatus(newStatus);
+    setCurrentPage(1);
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -117,7 +135,7 @@ export default function KycRequestsTable() {
     {
       header: "Created At",
       accessor: "created_at",
-      width: "18%",
+      width: "13%",
       csvCell: (row) => formatDate(row.created_at),
       cell: (row) =>
         row.isSkeleton ? (
@@ -129,7 +147,7 @@ export default function KycRequestsTable() {
     {
       header: "User ID",
       accessor: "user_id",
-      width: "20%",
+      width: "14%",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -142,7 +160,7 @@ export default function KycRequestsTable() {
     {
       header: "Email",
       accessor: "email",
-      width: "20%",
+      width: "16%",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -155,7 +173,7 @@ export default function KycRequestsTable() {
     {
       header: "Name",
       accessor: "name",
-      width: "20%",
+      width: "16%",
       csvCell: (row) => `${row.first_name || ""} ${row.last_name || ""}`.trim() || "-",
       cell: (row) =>
         row.isSkeleton ? (
@@ -172,7 +190,7 @@ export default function KycRequestsTable() {
     {
       header: "Role",
       accessor: "role",
-      width: "10%",
+      width: "8%",
       cell: (row) =>
         row.isSkeleton ? (
           <span
@@ -185,7 +203,7 @@ export default function KycRequestsTable() {
     {
       header: "Status",
       accessor: "status",
-      width: "12%",
+      width: "10%",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.badge}`} />
@@ -200,12 +218,14 @@ export default function KycRequestsTable() {
     {
       header: "Remarks",
       accessor: "remarks",
-      width: "14%",
+      width: "15%",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
         ) : (
-          row.remarks || "-"
+          <div className={styles.remarksCell} title={row.remarks}>
+            {row.remarks || "-"}
+          </div>
         ),
     },
     {
@@ -229,7 +249,13 @@ export default function KycRequestsTable() {
 
   return (
     <>
-      <KycActionHeader onExport={handleExport} />
+      <KycActionHeader
+        onExport={handleExport}
+        search={search}
+        onSearchChange={handleSearchChange}
+        status={status}
+        onStatusChange={handleStatusChange}
+      />
       <div className={styles.tableContainer}>
         <DataTable
           columns={columns}
@@ -238,6 +264,7 @@ export default function KycRequestsTable() {
           currentPage={currentPage}
           totalItems={totalItems}
           onPageChange={handlePageChange}
+          minWidth="1300px"
         />
         {selectedRequest && (
           <KycPreview
