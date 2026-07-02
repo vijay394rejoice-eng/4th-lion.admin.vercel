@@ -79,7 +79,7 @@ export default function TradesTable({ refreshTrigger, onUploadSuccess, onManualE
       }
     } catch (err) {
       console.error("Failed to delete trade:", err);
-      toast.error(err?.message || "Something went wrong while deleting trade");
+      // toast.error is handled by api.js globally on error
     } finally {
       setIsDeleting(false);
     }

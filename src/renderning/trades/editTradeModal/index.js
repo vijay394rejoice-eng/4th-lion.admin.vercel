@@ -116,7 +116,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
             }
         } catch (err) {
             console.error("Failed to update trade:", err);
-            toast.error(err?.message || "Something went wrong while updating trade");
+            // toast.error is handled by api.js globally on error
         } finally {
             setIsLoading(false);
         }

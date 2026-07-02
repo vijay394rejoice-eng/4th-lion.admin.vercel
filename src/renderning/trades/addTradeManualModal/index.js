@@ -6,6 +6,7 @@ import Button from '@/components/button';
 import Input from '@/components/input';
 import { createTradeManual } from '@/services/trades';
 import toast from 'react-hot-toast';
+import LogoutModal from '@/components/logoutModal';
 
 const RightIcon = '/assets/icons/right.svg';
 const Close = '/assets/icons/close.svg';
@@ -33,6 +34,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
     const [formData, setFormData] = useState({ ...defaultForm });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -137,20 +139,34 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
             }
         } catch (err) {
             console.error("Failed to save trades:", err);
-            toast.error(err?.message || "Something went wrong while saving trades");
+            // toast.error is handled by api.js globally on error
         } finally {
             setIsLoading(false);
         }
     };
 
+    const handleAttemptClose = () => {
+        const hasFormValues = Object.entries(formData).some(([key, val]) => {
+            if (key === 'commission' || key === 'swap') return val !== '0' && val !== '';
+            if (key === 'type') return false;
+            return val !== '';
+        });
+
+        if (hasFormValues || draftTrades.length > 0) {
+            setShowCancelConfirm(true);
+        } else {
+            onClose();
+        }
+    };
+
     return (
-        <div className={styles.addTradeManualModal} onClick={onClose}>
+        <div className={styles.addTradeManualModal} onClick={handleAttemptClose}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalheader}>
                     <div>
                         <h2>Add Trade Details (Multiple)</h2>
                     </div>
-                    <div className={styles.rightAlignment} onClick={onClose}>
+                    <div className={styles.rightAlignment} onClick={handleAttemptClose}>
                         <CloseIcon />
                     </div>
                 </div>
@@ -364,7 +380,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                         icon={Close} 
                         text="Cancel" 
                         primaryOutline 
-                        onClick={onClose} 
+                        onClick={handleAttemptClose} 
                         disabled={isLoading} 
                     />
                     <Button 
@@ -384,6 +400,20 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                     />
                 </div>
             </div>
+
+            {showCancelConfirm && (
+                <LogoutModal
+                    message="Are you sure you want to discard the entered details?"
+                    confirmText="Yes"
+                    confirmIcon="/assets/icons/right.svg"
+                    danger={true}
+                    onConfirm={() => {
+                        setShowCancelConfirm(false);
+                        onClose();
+                    }}
+                    onCancel={() => setShowCancelConfirm(false)}
+                />
+            )}
         </div>
     );
 }

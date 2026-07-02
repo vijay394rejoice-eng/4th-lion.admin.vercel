@@ -9,6 +9,7 @@ import Button from '@/components/button';
 import PlusIcon from '@/svg/plusIcon';
 import { uploadTradesCsv, runSettlements } from '@/services/trades';
 import toast from 'react-hot-toast';
+import  LogoutModal from '@/components/logoutModal';
 
 export default function TradeActionHeader({ onExport, onUploadSuccess, onManualEntryClick, onApplyFilters }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +17,7 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
     const fileInputRef = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
     const [isSettlementRunning, setIsSettlementRunning] = useState(false);
+    const [showSettlementConfirm, setShowSettlementConfirm] = useState(false);
 
     // Trade Filter states
     const [startDate, setStartDate] = useState('');
@@ -95,7 +97,7 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
             }
         } catch (err) {
             console.error("Excel upload failed:", err);
-            toast.error(err?.message || "Something went wrong during file upload");
+            // toast.error is handled by api.js globally on error
         } finally {
             setIsUploading(false);
             if (fileInputRef.current) {
@@ -104,7 +106,11 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
         }
     };
 
-    const handleSettlementClick = async () => {
+    const handleSettlementClick = () => {
+        setShowSettlementConfirm(true);
+    };
+
+    const handleConfirmSettlement = async () => {
         setIsSettlementRunning(true);
         try {
             const res = await runSettlements();
@@ -115,9 +121,10 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
             }
         } catch (err) {
             console.error("Settlement run failed:", err);
-            toast.error(err?.message || "Something went wrong while running settlement");
+            // toast.error is handled by api.js globally on error
         } finally {
             setIsSettlementRunning(false);
+            setShowSettlementConfirm(false);
         }
     };
 
@@ -288,6 +295,18 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
                     disabled={isSettlementRunning}
                 />
             </div>
+
+            {showSettlementConfirm && (
+                <LogoutModal
+                    message="All the open trades will be closed and after settlement you can not add any other trade of the same date/day"
+                    confirmText="Yes"
+                    confirmIcon="/assets/icons/right.svg"
+                    danger={true}
+                    onConfirm={handleConfirmSettlement}
+                    onCancel={() => setShowSettlementConfirm(false)}
+                    isSubmitting={isSettlementRunning}
+                />
+            )}
         </div>
     )
 }
