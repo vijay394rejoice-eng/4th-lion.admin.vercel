@@ -45,7 +45,7 @@ export default function Login() {
 
         setIsLoading(true);
         try {
-            const res = await login({ email, password });
+            const res = await login({ email, password, is_admin_login: true });
             if (res && res.status === 1) {
                 const token = res.data?.access_token || res.data?.accessToken || res.data?.token;
                 const refreshToken = res.data?.refresh_token || res.data?.refreshToken;

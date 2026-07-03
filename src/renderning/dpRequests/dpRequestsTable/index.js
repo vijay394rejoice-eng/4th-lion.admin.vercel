@@ -115,7 +115,7 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
       }
     } catch (err) {
       console.error(`Failed to ${confirmType} partner request:`, err);
-      toast.error(err?.message || `Something went wrong while processing the request`);
+      // toast.error(err?.message || `Something went wrong while processing the request`);
     } finally {
       setIsSubmitting(false);
     }

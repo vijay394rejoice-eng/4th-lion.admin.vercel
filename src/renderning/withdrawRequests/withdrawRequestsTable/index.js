@@ -133,7 +133,7 @@ const WithdrawRequestsTable = forwardRef(({ search, appliedFilters, onCountsChan
       }
     } catch (err) {
       console.error(`Failed to ${confirmType} withdraw request:`, err);
-      toast.error(err?.message || `Something went wrong while processing the request`);
+      // toast.error(err?.message || `Something went wrong while processing the request`);
     } finally {
       setIsSubmitting(false);
     }

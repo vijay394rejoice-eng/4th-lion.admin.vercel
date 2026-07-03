@@ -202,14 +202,14 @@ const ProfitSharingTable = forwardRef(
       },
       {
         header: "Users Profit",
-        accessor: "user_profit",
+        accessor: "total_users_profit",
         width: "12%",
-        csvCell: (row) => formatCurrency(row.user_profit),
+        csvCell: (row) => formatCurrency(row.total_users_profit),
         cell: (row) =>
           row.isSkeleton ? (
             <span className={`${styles.skeleton} ${styles.text} ${styles.short}`} />
           ) : (
-            <span style={{ fontWeight: 600 }}>{formatCurrency(row.user_profit)}</span>
+            <span style={{ fontWeight: 600 }}>{formatCurrency(row.total_users_profit)}</span>
           ),
       },
       {

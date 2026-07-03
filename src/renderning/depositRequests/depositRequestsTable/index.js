@@ -90,7 +90,7 @@ export default function DepositRequestsTable() {
       }
     } catch (err) {
       console.error(`Failed to ${confirmType} deposit request:`, err);
-      toast.error(err?.message || `Something went wrong while processing the request`);
+      // toast.error(err?.message || `Something went wrong while processing the request`);
     } finally {
       setIsSubmitting(false);
     }

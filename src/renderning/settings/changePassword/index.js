@@ -84,7 +84,7 @@ export default function ChangePassword() {
             }
         } catch (err) {
             console.error('Failed to change password:', err);
-            toast.error(err?.message || 'Something went wrong while changing password');
+            // toast.error(err?.message || 'Something went wrong while changing password');
         } finally {
             setIsLoading(false);
         }

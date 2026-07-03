@@ -9,7 +9,6 @@ const RightIcon = 'assets/icons/right.svg';
 const Close = 'assets/icons/close.svg';
 
 export default function KycPreview({ request, onClose, onApprove, onReject, isSubmitting }) {
-    console.log("🚀 ~ KycPreview ~ request:", request)
     const [remarks, setRemarks] = useState('');
 
     if (!request) return null;

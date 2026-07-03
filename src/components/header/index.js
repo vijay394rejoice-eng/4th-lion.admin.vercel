@@ -24,7 +24,7 @@ export default function Header() {
       }
     } catch (err) {
       console.error("Failed to activate pending users:", err);
-      toast.error(err?.message || "Something went wrong while activating users");
+      // toast.error(err?.message || "Something went wrong while activating users");
     } finally {
       setIsActivating(false);
     }

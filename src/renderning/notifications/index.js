@@ -127,7 +127,7 @@ export default function Notifications() {
             }
         } catch (err) {
             console.error("Failed to send notification:", err);
-            toast.error(err.message || "Something went wrong while sending notification");
+            // toast.error(err.message || "Something went wrong while sending notification");
         } finally {
             setIsSendingNotification(false);
         }
@@ -176,7 +176,7 @@ export default function Notifications() {
             }
         } catch (err) {
             console.error("Failed to send popup:", err);
-            toast.error(err.message || "Something went wrong while sending popup");
+            // toast.error(err.message || "Something went wrong while sending popup");
         } finally {
             setIsSendingPopup(false);
         }

@@ -54,7 +54,7 @@ export default function KycRequestsTable() {
       }
     } catch (err) {
       console.error("Failed to approve KYC:", err);
-      toast.error(err?.message || "Something went wrong while approving");
+      // toast.error(err?.message || "Something went wrong while approving");
     } finally {
       setIsSubmitting(false);
     }
@@ -73,7 +73,7 @@ export default function KycRequestsTable() {
       }
     } catch (err) {
       console.error("Failed to reject KYC:", err);
-      toast.error(err?.message || "Something went wrong while rejecting");
+      // toast.error(err?.message || "Something went wrong while rejecting");
     } finally {
       setIsSubmitting(false);
     }

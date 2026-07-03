@@ -128,7 +128,7 @@ const UsersTable = forwardRef(({ search, appliedFilters }, ref) => {
       }
     } catch (err) {
       console.error(`Failed to ${confirmAction} user:`, err);
-      toast.error(err?.message || `Something went wrong while trying to ${confirmAction} user`);
+      // toast.error(err?.message || `Something went wrong while trying to ${confirmAction} user`);
     } finally {
       setIsSubmitting(false);
     }

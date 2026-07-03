@@ -38,7 +38,7 @@ export default function ProfitShareSetup() {
             }
         } catch (err) {
             console.error("Failed to load settlement config:", err);
-            toast.error(err?.message || "Something went wrong while loading configuration");
+            // toast.error(err?.message || "Something went wrong while loading configuration");
         } finally {
             setIsLoading(false);
         }
@@ -96,7 +96,7 @@ export default function ProfitShareSetup() {
             }
         } catch (err) {
             console.error("Failed to update settlement config:", err);
-            toast.error(err?.message || "Something went wrong while saving configuration");
+            // toast.error(err?.message || "Something went wrong while saving configuration");
         } finally {
             setIsSaving(false);
         }

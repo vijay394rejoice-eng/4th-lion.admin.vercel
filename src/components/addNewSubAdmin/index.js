@@ -46,7 +46,7 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
                 }
             } catch (err) {
                 console.error("Failed to load permissions:", err);
-                toast.error("Failed to load permissions list");
+                // toast.error("Failed to load permissions list");
             } finally {
                 setIsLoadingPermissions(false);
             }
@@ -147,7 +147,7 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
             }
         } catch (err) {
             console.error('Failed to save sub-admin:', err);
-            toast.error(err?.message || 'Something went wrong');
+            // toast.error(err?.message || 'Something went wrong');
         } finally {
             setIsSubmitting(false);
         }
@@ -171,7 +171,7 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
             }
         } catch (err) {
             console.error('Failed to delete sub-admin:', err);
-            toast.error(err?.message || 'Something went wrong');
+            // toast.error(err?.message || 'Something went wrong');
         } finally {
             setIsDeleting(false);
             setShowDeleteConfirm(false);

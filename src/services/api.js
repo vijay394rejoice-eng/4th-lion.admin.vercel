@@ -160,9 +160,9 @@ export const request = async (fn, showError = true) => {
     const message = err?.response?.data?.message || err?.response?.data?.error || err?.message || 'Something went wrong';
     
     // Only show toast if showError is true and we're in the browser
-    // if (showError && typeof window !== 'undefined') {
-    //   toast.error(message);
-    // }
+    if (showError && typeof window !== 'undefined') {
+      toast.error(message);
+    }
     
     throw err?.response?.data || err;
   }
