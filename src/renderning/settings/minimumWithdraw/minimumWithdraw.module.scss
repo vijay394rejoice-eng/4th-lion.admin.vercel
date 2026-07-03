@@ -9,6 +9,17 @@
     gap: 12px;
     padding: 16px;
 
+    // Hide spin buttons for input type number
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
     .buttonGrid {
         display: grid;
         grid-template-columns: 1fr 1fr;

@@ -4,3 +4,9 @@ export const getSettlementConfig = () =>
 
 export const updateSettlementConfig = (data) =>
   request(() => api.put('/settlement-config', data));
+
+export const getMinWithdrawAmount = () =>
+  request(() => api.get('/admin/settings/min-withdraw-amount'));
+
+export const updateMinWithdrawAmount = (data) =>
+  request(() => api.put('/admin/settings/min-withdraw-amount', data));
