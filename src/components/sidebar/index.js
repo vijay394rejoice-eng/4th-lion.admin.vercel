@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './sidebar.module.scss';
@@ -13,6 +13,8 @@ import CheckboxIcon from '@/svg/checkboxIcon';
 import AdminIcon from '@/svg/adminIcon';
 import SettingIcon from '@/svg/settingIcon';
 import TradesIcon from '@/svg/tradesIcon';
+import { hasRoutePermission } from '@/utils/permissions';
+import { getMe } from '@/services/auth';
 
 const Logo = '/assets/logo/logo.svg';
 
@@ -20,11 +22,48 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
 
+  const [role, setRole] = useState(null);
+  const [permissions, setPermissions] = useState([]);
+  const [isMounted, setIsMounted] = useState(false);
+
   // Close sidebar on route change
-  React.useEffect(() => {
+  useEffect(() => {
     document.querySelector('.sidebar-layout')?.classList.remove('active');
     document.querySelector('.sidebar-overlay')?.classList.remove('active');
   }, [pathname]);
+
+  // Load permissions on mount
+  useEffect(() => {
+    setIsMounted(true);
+    const savedRole = localStorage.getItem('user_role');
+    const savedPermissions = localStorage.getItem('permissions');
+    
+    if (savedRole) setRole(savedRole);
+    if (savedPermissions) {
+      try {
+        setPermissions(JSON.parse(savedPermissions));
+      } catch (e) {
+        console.error("Failed to parse permissions from localStorage:", e);
+      }
+    }
+
+    const fetchLatestProfile = async () => {
+      try {
+        const res = await getMe();
+        if (res && res.status === 1) {
+          const userData = res.data;
+          setRole(userData.role || '');
+          setPermissions(userData.permissions || []);
+          localStorage.setItem('user_role', userData.role || '');
+          localStorage.setItem('permissions', JSON.stringify(userData.permissions || []));
+        }
+      } catch (err) {
+        console.error("Failed to fetch fresh user profile:", err);
+      }
+    };
+
+    fetchLatestProfile();
+  }, []);
 
   const closeSidebar = () => {
     document.querySelector('.sidebar-layout')?.classList.remove('active');
@@ -45,6 +84,11 @@ export default function Sidebar() {
     { label: 'Settings', path: '/settings', Icon: SettingIcon },
   ];
 
+  // Filter menu items based on sub-admin permissions
+  const visibleMenuItems = isMounted
+    ? menuItems.filter(item => hasRoutePermission(item.path, role, permissions))
+    : [];
+
   return (
     <aside className={styles.aside}>
       <div className={styles.logo}>
@@ -56,7 +100,7 @@ export default function Sidebar() {
         </button>
       </div>
       <div className={styles.asideBody}>
-        {menuItems.map((item) => {
+        {visibleMenuItems.map((item) => {
           const Icon = item.Icon;
           const isActive = pathname === item.path;
           return (

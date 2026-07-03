@@ -10,3 +10,7 @@ export const refresh = (payload) =>
 
 export const changePassword = (payload) =>
   request(() => api.post('/user/change-password', payload));
+
+export const getMe = () =>
+  request(() => api.get('/user/me'));
+

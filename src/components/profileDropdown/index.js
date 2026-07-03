@@ -68,6 +68,13 @@ export default function ProfileDropdown() {
         // Clear access_token and refresh_token cookies by setting their expiration date to the past
         document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
         document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        
+        // Clear local storage
+        localStorage.removeItem('user_role');
+        localStorage.removeItem('permissions');
+        
         toast.success('Logged out successfully');
         setIsOpen(false);
         router.push('/');

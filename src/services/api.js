@@ -141,6 +141,11 @@ api.interceptors.response.use(
           document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
           document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
           document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+          
+          // Clear local storage
+          localStorage.removeItem('user_role');
+          localStorage.removeItem('permissions');
+          
           window.location.href = '/';
         }
 

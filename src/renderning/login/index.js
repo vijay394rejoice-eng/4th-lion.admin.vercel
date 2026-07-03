@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { login } from '@/services/auth';
+import { login, getMe } from '@/services/auth';
 import styles from './login.module.scss';
 import AuthTitle from '@/components/authTitle';
 import Input from '@/components/input';
@@ -60,6 +60,18 @@ export default function Login() {
                 // Save refresh token in cookie (valid for 30 days)
                 if (refreshToken) {
                     document.cookie = `refresh_token=${encodeURIComponent(refreshToken)}; path=/; max-age=2592000; SameSite=Lax${isSecure ? '; Secure' : ''}`;
+                }
+                
+                // Fetch user profile and save permissions & role in local storage
+                try {
+                    const profileRes = await getMe();
+                    if (profileRes && profileRes.status === 1) {
+                        const userData = profileRes.data;
+                        localStorage.setItem('user_role', userData.role || '');
+                        localStorage.setItem('permissions', JSON.stringify(userData.permissions || []));
+                    }
+                } catch (profileErr) {
+                    console.error("Failed to fetch user profile during login:", profileErr);
                 }
                 
                 toast.success(res.message || 'Logged in successfully');

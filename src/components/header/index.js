@@ -12,6 +12,25 @@ import Button from '../button';
 export default function Header() {
   const pathname = usePathname();
   const [isActivating, setIsActivating] = useState(false);
+  const [role, setRole] = useState(null);
+  const [permissions, setPermissions] = useState([]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+    const savedRole = localStorage.getItem('user_role');
+    const savedPermissions = localStorage.getItem('permissions');
+    if (savedRole) setRole(savedRole);
+    if (savedPermissions) {
+      try {
+        setPermissions(JSON.parse(savedPermissions));
+      } catch (e) {
+        console.error("Failed to parse permissions in Header:", e);
+      }
+    }
+  }, []);
+
+  const showActivateButton = isMounted && (role !== 'SUB_ADMIN' || permissions.includes('manage_transactions'));
 
   const handleActivatePending = async () => {
     setIsActivating(true);
@@ -64,12 +83,14 @@ export default function Header() {
         </div>
       </div>
       <div className={styles.rightAlignment} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <Button 
-            text={isActivating ? "Activating..." : "Activate Investment Amount"} 
-            primaryOutline 
-            onClick={handleActivatePending}
-            disabled={isActivating}
-        />
+        {showActivateButton && (
+          <Button 
+              text={isActivating ? "Activating..." : "Activate Investment Amount"} 
+              primaryOutline 
+              onClick={handleActivatePending}
+              disabled={isActivating}
+          />
+        )}
         <div className={styles.bellIcon}>
           <NotificationDropdown />
         </div>
