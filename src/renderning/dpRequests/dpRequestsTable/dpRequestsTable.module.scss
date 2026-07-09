@@ -137,3 +137,23 @@
         border-radius: 100px;
     }
 }
+
+.userWrapper {
+    max-width: 220px;
+    overflow: hidden;
+
+    .userName {
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .userEmail {
+        font-size: 0.85em;
+        color: #666;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}

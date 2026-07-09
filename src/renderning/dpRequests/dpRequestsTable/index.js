@@ -151,17 +151,20 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
     },
     {
       header: "User",
-      width: "18%",
+      width: "220px",
       csvCell: (row) => `${row.first_name || ""} ${row.last_name || ""} (${row.email || ""})`,
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
         ) : (
-          <div title={`${row.first_name || ""} ${row.last_name || ""} (${row.email || ""})`}>
-            <div style={{ fontWeight: 600 }}>
+          <div 
+            className={styles.userWrapper} 
+            title={`${row.first_name || ""} ${row.last_name || ""} (${row.email || ""})`}
+          >
+            <div className={styles.userName}>
               {row.first_name || "-"} {row.last_name || ""}
             </div>
-            <div style={{ fontSize: "0.85em", color: "#666" }}>
+            <div className={styles.userEmail}>
               {row.email || "-"}
             </div>
           </div>
@@ -218,7 +221,7 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
     {
       header: "Status",
       accessor: "status",
-      width: "10%",
+      width: "120px",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.badge}`} />
@@ -232,7 +235,7 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
     },
     {
       header: "Action",
-      width: "10%",
+      width: "180px",
       cell: (row) =>
         row.isSkeleton ? (
           <div className={styles.actionBtnGroup}>
