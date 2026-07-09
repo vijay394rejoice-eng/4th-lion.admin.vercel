@@ -36,13 +36,13 @@ export default function KycActionHeader({
 
     // Sync local search with parent search (e.g. if cleared externally)
     useEffect(() => {
-        setLocalSearch(search);
+        setLocalSearch(search?.trim() || "");
     }, [search]);
 
     // Debounce effect for search input (500ms)
     useEffect(() => {
         const handler = setTimeout(() => {
-            onSearchChange(localSearch);
+            onSearchChange(localSearch?.trim());
         }, 500);
         return () => clearTimeout(handler);
     }, [localSearch, onSearchChange]);

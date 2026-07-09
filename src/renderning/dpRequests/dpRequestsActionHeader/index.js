@@ -34,14 +34,14 @@ export default function DPRequestsActionHeader({
 
   // Sync local search with parent search (e.g. if cleared externally)
   useEffect(() => {
-    setLocalSearch(search);
+    setLocalSearch(search?.trim() || "");
   }, [search]);
 
   // Debounce effect for search input (500ms)
   useEffect(() => {
     const handler = setTimeout(() => {
       if (onSearchChange) {
-        onSearchChange(localSearch);
+        onSearchChange(localSearch?.trim());
       }
     }, 500);
     return () => clearTimeout(handler);
