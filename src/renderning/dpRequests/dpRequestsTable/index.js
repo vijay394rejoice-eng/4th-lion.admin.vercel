@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./dpRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
 import { getPartnerRequests, approvePartnerRequest, rejectPartnerRequest } from "@/services/dpRequests";
@@ -75,19 +75,19 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
     fetchPartnerRequests(currentPage);
   }, [currentPage, filters, search]);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
-  };
+  }, []);
 
-  const handleSearchChange = (newSearch) => {
+  const handleSearchChange = useCallback((newSearch) => {
     setSearch(newSearch);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handleApplyFilters = (newFilters) => {
+  const handleApplyFilters = useCallback((newFilters) => {
     setFilters(newFilters);
     setCurrentPage(1);
-  };
+  }, []);
 
   const handleActionClick = (request, type) => {
     setSelectedRequest(request);

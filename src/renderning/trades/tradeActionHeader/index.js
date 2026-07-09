@@ -11,13 +11,23 @@ import { uploadTradesCsv, runSettlements } from '@/services/trades';
 import toast from 'react-hot-toast';
 import  LogoutModal from '@/components/logoutModal';
 
-export default function TradeActionHeader({ onExport, onUploadSuccess, onManualEntryClick, onApplyFilters }) {
+export default function TradeActionHeader({
+    onExport,
+    onUploadSuccess,
+    onManualEntryClick,
+    onApplyFilters,
+    search = "",
+    onSearchChange,
+}) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
     const fileInputRef = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
     const [isSettlementRunning, setIsSettlementRunning] = useState(false);
     const [showSettlementConfirm, setShowSettlementConfirm] = useState(false);
+
+    // Local search state for immediate typing feedback
+    const [localSearch, setLocalSearch] = useState(search);
 
     // Trade Filter states
     const [startDate, setStartDate] = useState('');
@@ -37,6 +47,21 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    // Sync local search with parent search (e.g. if cleared externally)
+    useEffect(() => {
+        setLocalSearch(search);
+    }, [search]);
+
+    // Debounce effect for search input (500ms)
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            if (onSearchChange) {
+                onSearchChange(localSearch?.trim());
+            }
+        }, 500);
+        return () => clearTimeout(handler);
+    }, [localSearch, onSearchChange]);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -141,7 +166,12 @@ export default function TradeActionHeader({ onExport, onUploadSuccess, onManualE
     return (
         <div className={styles.tradeActionHeader}>
             <div className={styles.searchbar}>
-                <input type='text' placeholder='Search' />
+                <input
+                    type="text"
+                    placeholder="Search"
+                    value={localSearch}
+                    onChange={(e) => setLocalSearch(e.target.value)}
+                />
                 <div className={styles.searchIcon}>
                     <SearchIcon />
                 </div>

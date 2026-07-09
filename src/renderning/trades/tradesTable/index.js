@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./tradesTable.module.scss";
 import DataTable from "@/components/dataTable";
 import { getTrades, deleteTrade } from "@/services/trades";
@@ -15,6 +15,7 @@ export default function TradesTable({ refreshTrigger, onUploadSuccess, onManualE
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState({});
+  const [search, setSearch] = useState("");
 
   // Deletion states
   const [selectedTrade, setSelectedTrade] = useState(null);
@@ -30,7 +31,11 @@ export default function TradesTable({ refreshTrigger, onUploadSuccess, onManualE
   const fetchTrades = async (page) => {
     setIsLoading(true);
     try {
-      const res = await getTrades({ page, limit: pageSize, ...filters });
+      const params = { page, limit: pageSize, ...filters };
+      if (search) {
+        params.search = search;
+      }
+      const res = await getTrades(params);
       if (res && res.status === 1) {
         setData(res.data?.items || []);
         setTotalItems(res.data?.total || 0);
@@ -44,11 +49,21 @@ export default function TradesTable({ refreshTrigger, onUploadSuccess, onManualE
 
   useEffect(() => {
     fetchTrades(currentPage);
-  }, [currentPage, refreshTrigger, filters]);
+  }, [currentPage, refreshTrigger, filters, search]);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
-  };
+  }, []);
+
+  const handleSearchChange = useCallback((newSearch) => {
+    setSearch(newSearch);
+    setCurrentPage(1);
+  }, []);
+
+  const handleApplyFilters = useCallback((newFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  }, []);
 
   const handleExport = () => {
     exportToCsv(data, columns, "trades.csv");
@@ -238,7 +253,9 @@ export default function TradesTable({ refreshTrigger, onUploadSuccess, onManualE
         onExport={handleExport} 
         onUploadSuccess={onUploadSuccess}
         onManualEntryClick={onManualEntryClick}
-        onApplyFilters={setFilters}
+        onApplyFilters={handleApplyFilters}
+        search={search}
+        onSearchChange={handleSearchChange}
       />
       <div className={styles.tableContainer}>
         <DataTable 

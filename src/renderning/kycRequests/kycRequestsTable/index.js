@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./kycRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
 import { getKYCRequests, approveKYC, rejectKYC } from "@/services/kyc";
@@ -107,19 +107,19 @@ export default function KycRequestsTable() {
     fetchKycRequests(currentPage);
   }, [currentPage, search, status]);
 
-  const handleSearchChange = (newSearch) => {
+  const handleSearchChange = useCallback((newSearch) => {
     setSearch(newSearch);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handleStatusChange = (newStatus) => {
+  const handleStatusChange = useCallback((newStatus) => {
     setStatus(newStatus);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
-  };
+  }, []);
 
   const handleExport = () => {
     exportToCsv(data, columns, "kyc_requests.csv");
