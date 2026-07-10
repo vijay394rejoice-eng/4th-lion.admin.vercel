@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './settings.module.scss';
 import RightIcon from '@/svg/rightIcon';
@@ -12,14 +12,31 @@ import ChangePassword from './changePassword';
 
 export default function Settings() {
     const [activeTab, setActiveTab] = useState('profit');
+    const [userRole, setUserRole] = useState(null);
+
+    useEffect(() => {
+        const role = localStorage.getItem('user_role');
+        setUserRole(role);
+        if (role === 'SUB_ADMIN') {
+            setActiveTab('password');
+        }
+    }, []);
 
     const menuItems = [
         { id: 'profit', label: 'Profit Share Setup', Icon: ProfitIcon },
         { id: 'withdraw', label: 'Minimum Withdraw Amount', Icon: Withdraw },
         { id: 'password', label: 'Change Password', Icon: ChangeIcon },
-    ];
+    ].filter(item => {
+        if (userRole === 'SUB_ADMIN') {
+            return item.id !== 'profit' && item.id !== 'withdraw';
+        }
+        return true;
+    });
 
     const renderActiveComponent = () => {
+        if (userRole === 'SUB_ADMIN' && (activeTab === 'profit' || activeTab === 'withdraw')) {
+            return null;
+        }
         switch (activeTab) {
             case 'profit':
                 return <ProfitShareSetup />;
