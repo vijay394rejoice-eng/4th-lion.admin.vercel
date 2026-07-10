@@ -40,11 +40,13 @@
         color: #D97706; // Amber-600
     }
 
+    &.success,
     &.approved {
         background-color: #DCFCE7; // Green-100
         color: #15803D; // Green-700
     }
 
+    &.failed,
     &.rejected {
         background-color: #FEE2E2; // Red-100
         color: #B91C1C; // Red-700

@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import styles from "./depositRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
 import { getDepositRequests, approveDepositRequest, rejectDepositRequest } from "@/services/deposit";
 import LogoutModal from "@/components/logoutModal";
 import toast from "react-hot-toast";
+import { exportToCsv } from "@/utils/exportCsv";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -28,7 +29,7 @@ const formatDate = (dateString) => {
   }
 };
 
-export default function DepositRequestsTable() {
+const DepositRequestsTable = forwardRef(({ search, appliedFilters }, ref) => {
   const [data, setData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +45,22 @@ export default function DepositRequestsTable() {
   const fetchDepositRequests = async (page) => {
     setIsLoading(true);
     try {
-      const res = await getDepositRequests({ page, limit: pageSize });
+      const params = { page, limit: pageSize };
+      
+      if (search) {
+        params.search = search;
+      }
+      if (appliedFilters?.status) {
+        params.status = appliedFilters.status;
+      }
+      if (appliedFilters?.startDate) {
+        params.start_date = appliedFilters.startDate;
+      }
+      if (appliedFilters?.endDate) {
+        params.end_date = appliedFilters.endDate;
+      }
+
+      const res = await getDepositRequests(params);
       if (res && res.status === 1) {
         setData(res.data?.items || []);
         setTotalItems(res.data?.total || 0);
@@ -56,9 +72,24 @@ export default function DepositRequestsTable() {
     }
   };
 
+  const prevSearchRef = useRef(search);
+  const prevFiltersRef = useRef(appliedFilters);
+
   useEffect(() => {
+    const searchChanged = prevSearchRef.current !== search;
+    const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(appliedFilters);
+
+    if (searchChanged || filtersChanged) {
+      prevSearchRef.current = search;
+      prevFiltersRef.current = appliedFilters;
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+        return; // Don't fetch here; changing currentPage will trigger the effect again
+      }
+    }
+
     fetchDepositRequests(currentPage);
-  }, [currentPage]);
+  }, [currentPage, search, appliedFilters]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -101,6 +132,12 @@ export default function DepositRequestsTable() {
     setSelectedRequest(null);
   };
 
+  useImperativeHandle(ref, () => ({
+    handleExport() {
+      exportToCsv(data, columns, "deposit_requests.csv");
+    }
+  }));
+
   // Generate 10 skeleton rows when loading to align columns nicely
   const skeletonData = Array.from({ length: pageSize }, (_, index) => ({
     id: `skeleton-${index}`,
@@ -112,6 +149,7 @@ export default function DepositRequestsTable() {
       header: "Created At",
       accessor: "created_at",
       width: "18%",
+      csvCell: (row) => formatDate(row.created_at),
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -122,6 +160,7 @@ export default function DepositRequestsTable() {
     {
       header: "User",
       width: "18%",
+      csvCell: (row) => `${row.first_name || ""} ${row.last_name || ""} (${row.email || ""})`.trim(),
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.text}`} />
@@ -210,31 +249,31 @@ export default function DepositRequestsTable() {
           </span>
         ),
     },
-    {
-      header: "Action",
-      width: "14%",
-      cell: (row) =>
-        row.isSkeleton ? (
-          <span className={`${styles.skeleton} ${styles.badge}`} />
-        ) : row.status === "PENDING" ? (
-          <div className={styles.actionBtnGroup}>
-            <button
-              className={styles.approveBtn}
-              onClick={() => handleActionClick(row, "approve")}
-            >
-              Approve
-            </button>
-            <button
-              className={styles.rejectBtn}
-              onClick={() => handleActionClick(row, "reject")}
-            >
-              Reject
-            </button>
-          </div>
-        ) : (
-          "-"
-        ),
-    },
+    // {
+    //   header: "Action",
+    //   width: "14%",
+    //   cell: (row) =>
+    //     row.isSkeleton ? (
+    //       <span className={`${styles.skeleton} ${styles.badge}`} />
+    //     ) : row.status === "PENDING" ? (
+    //       <div className={styles.actionBtnGroup}>
+    //         <button
+    //           className={styles.approveBtn}
+    //           onClick={() => handleActionClick(row, "approve")}
+    //         >
+    //           Approve
+    //         </button>
+    //         <button
+    //           className={styles.rejectBtn}
+    //           onClick={() => handleActionClick(row, "reject")}
+    //         >
+    //           Reject
+    //         </button>
+    //       </div>
+    //     ) : (
+    //       "-"
+    //     ),
+    // },
   ];
 
   const tableData = isLoading ? skeletonData : data;
@@ -270,4 +309,7 @@ export default function DepositRequestsTable() {
       )}
     </>
   );
-}
+});
+
+DepositRequestsTable.displayName = "DepositRequestsTable";
+export default DepositRequestsTable;
