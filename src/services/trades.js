@@ -21,3 +21,6 @@ export const updateTrade = (tradeId, payload) =>
 
 export const runSettlements = () =>
   request(() => api.post('/admin-trade/settlements/run'));
+
+export const exportTradesApi = (params) =>
+  request(() => api.get('/admin-trade/trades/export', { params, responseType: 'blob' }));

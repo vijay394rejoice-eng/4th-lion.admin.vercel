@@ -60,3 +60,34 @@ export const exportToCsv = (data, columns, filename = 'export.csv') => {
   link.click();
   document.body.removeChild(link);
 };
+
+/**
+ * Utility function to download a file from an API blob response.
+ * @param {Object} response - The Axios response object containing the blob data
+ * @param {string} defaultFilename - The fallback filename if none is provided in headers
+ */
+export const downloadFileFromResponse = (response, defaultFilename = 'export.csv') => {
+  let filename = defaultFilename;
+  let blobData = response;
+
+  if (response && response.headers) {
+    const contentDisposition = response.headers['content-disposition'];
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+      if (filenameMatch && filenameMatch.length === 2) {
+        filename = filenameMatch[1];
+      }
+    }
+    blobData = response.data;
+  }
+
+  const blob = new Blob([blobData]);
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+};

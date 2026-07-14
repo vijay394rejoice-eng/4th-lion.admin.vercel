@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import styles from "./depositRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getDepositRequests, approveDepositRequest, rejectDepositRequest } from "@/services/deposit";
+import { getDepositRequests, approveDepositRequest, rejectDepositRequest, exportDepositsApi } from "@/services/deposit";
 import LogoutModal from "@/components/logoutModal";
 import toast from "react-hot-toast";
-import { exportToCsv } from "@/utils/exportCsv";
+import { downloadFileFromResponse } from "@/utils/exportCsv";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -133,8 +133,27 @@ const DepositRequestsTable = forwardRef(({ search, appliedFilters }, ref) => {
   };
 
   useImperativeHandle(ref, () => ({
-    handleExport() {
-      exportToCsv(data, columns, "deposit_requests.csv");
+    async handleExport() {
+      try {
+        const payload = {};
+        if (search) {
+          payload.search = search;
+        }
+        if (appliedFilters?.status) {
+          payload.status = appliedFilters.status;
+        }
+        if (appliedFilters?.startDate) {
+          payload.start_date = appliedFilters.startDate;
+        }
+        if (appliedFilters?.endDate) {
+          payload.end_date = appliedFilters.endDate;
+        }
+
+        const response = await exportDepositsApi(payload);
+        downloadFileFromResponse(response, "deposit_requests.csv");
+      } catch (err) {
+        toast.error("Failed to export deposits");
+      }
     }
   }));
 

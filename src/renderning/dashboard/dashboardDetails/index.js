@@ -449,7 +449,7 @@ export default function DashboardDetails() {
                                     <path d={ibPath} fill="#EAEAEA" />
                                     
                                     {/* Company Slice (Stripes pattern) */}
-                                    <path d={companyPath} fill="url(#stripes)" />
+                                    <path d={companyPath} fill="var(--Blue, #5a86c08e)" />
                                     
                                     {/* Investor Slice (Solid Blue) */}
                                     <path d={investorPath} fill="var(--Blue, #1C61BA)" />
@@ -472,7 +472,7 @@ export default function DashboardDetails() {
                                     <span className={styles.graySquare}></span> DP{!isSharingModelLoading && `(${ibPct}%)`}
                                 </div>
                                 <div className={styles.legendItem}>
-                                    <span className={styles.blueSquare}></span> Company {!isSharingModelLoading && `(${companyPct}%)`}
+                                    <span className={styles.lightBlueSquare}></span> Company {!isSharingModelLoading && `(${companyPct}%)`}
                                 </div>
                             </div>
                         </div>

@@ -111,7 +111,7 @@
                             align-items: center;
                             gap: 8px;
 
-                            .blueSquare, .graySquare {
+                            .blueSquare, .graySquare, .lightBlueSquare {
                                 width: 10px;
                                 height: 10px;
                                 display: block;
@@ -121,6 +121,9 @@
                             }
                             .graySquare {
                                 background: #EAEAEA;
+                            }
+                            .lightBlueSquare {
+                                background: var(--Blue, #5a86c08e);
                             }
                         }
                     }

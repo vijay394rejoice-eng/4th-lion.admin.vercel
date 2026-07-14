@@ -8,8 +8,9 @@ import React, {
 } from "react";
 import styles from "./profitSharingTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getProfitSharing } from "@/services/profitSharing";
-import { exportToCsv } from "@/utils/exportCsv";
+import { getProfitSharing, exportProfitSharingApi } from "@/services/profitSharing";
+import { downloadFileFromResponse } from "@/utils/exportCsv";
+import toast from "react-hot-toast";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -117,8 +118,33 @@ const ProfitSharingTable = forwardRef(
     };
 
     useImperativeHandle(ref, () => ({
-      handleExport() {
-        exportToCsv(data, columns, "profit_sharing.csv");
+      async handleExport() {
+        try {
+          const payload = {};
+          if (search) {
+            payload.search = search;
+          }
+          if (appliedFilters?.status) {
+            payload.status = appliedFilters.status;
+          }
+          if (appliedFilters?.minAmount) {
+            payload.min_amount = Number(appliedFilters.minAmount);
+          }
+          if (appliedFilters?.maxAmount) {
+            payload.max_amount = Number(appliedFilters.maxAmount);
+          }
+          if (appliedFilters?.startDate) {
+            payload.start_date = appliedFilters.startDate;
+          }
+          if (appliedFilters?.endDate) {
+            payload.end_date = appliedFilters.endDate;
+          }
+
+          const response = await exportProfitSharingApi(payload);
+          downloadFileFromResponse(response, "profit_sharing.csv");
+        } catch (err) {
+          toast.error("Failed to export profit sharing");
+        }
       },
     }));
 

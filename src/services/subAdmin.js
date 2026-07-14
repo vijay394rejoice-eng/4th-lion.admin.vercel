@@ -14,3 +14,6 @@ export const deleteSubAdmin = (userId) =>
 
 export const getSubAdminPermissions = () =>
   request(() => api.get('/admin/sub-admin/permissions'));
+
+export const exportSubAdminsApi = (params) =>
+  request(() => api.get('/admin/sub-admin/export', { params, responseType: 'blob' }));

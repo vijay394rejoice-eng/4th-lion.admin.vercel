@@ -3,6 +3,8 @@ import { api, request } from './api';
 export const getUsers = (params) =>
   request(() => api.get('/admin/users', { params }));
 
+
+
 export const blockUser = (userId) =>
   request(() => api.post(`/admin/users/${userId}/block`));
 
@@ -11,3 +13,6 @@ export const unblockUser = (userId) =>
 
 export const activatePendingUsers = () =>
   request(() => api.post('/admin/activate-pending'));
+
+export const exportUsersApi = (params) =>
+  request(() => api.get('/admin/users/export', { params, responseType: 'blob' }));

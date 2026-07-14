@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styles from "./dpRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getPartnerRequests, approvePartnerRequest, rejectPartnerRequest } from "@/services/dpRequests";
+import { getPartnerRequests, approvePartnerRequest, rejectPartnerRequest, exportPartnerRequestsApi } from "@/services/dpRequests";
 import LogoutModal from "@/components/logoutModal";
 import DPRequestsActionHeader from "../dpRequestsActionHeader";
-import { exportToCsv } from "@/utils/exportCsv";
+import { downloadFileFromResponse } from "@/utils/exportCsv";
 import toast from "react-hot-toast";
 
 const formatDate = (dateString) => {
@@ -126,8 +126,14 @@ export default function DPRequestsTable({ onDataFetched, onLoadStart }) {
     setSelectedRequest(null);
   };
 
-  const handleExport = () => {
-    exportToCsv(data, columns, "partner_requests.csv");
+  const handleExport = async () => {
+    try {
+      const payload = { search, ...filters };
+      const response = await exportPartnerRequestsApi(payload);
+      downloadFileFromResponse(response, "partner_requests.csv");
+    } catch (err) {
+      toast.error("Failed to export partner requests");
+    }
   };
 
   // Generate 10 skeleton rows when loading to align columns nicely

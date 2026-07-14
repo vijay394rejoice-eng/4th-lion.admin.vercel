@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styles from "./tradesTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getTrades, deleteTrade } from "@/services/trades";
+import { getTrades, deleteTrade, exportTradesApi } from "@/services/trades";
 import TradeActionHeader from "../tradeActionHeader";
-import { exportToCsv } from "@/utils/exportCsv";
+import { downloadFileFromResponse } from "@/utils/exportCsv";
 import LogoutModal from "@/components/logoutModal";
 import EditTradeModal from "../editTradeModal";
 import toast from "react-hot-toast";
@@ -65,8 +65,14 @@ export default function TradesTable({ refreshTrigger, onUploadSuccess, onManualE
     setCurrentPage(1);
   }, []);
 
-  const handleExport = () => {
-    exportToCsv(data, columns, "trades.csv");
+  const handleExport = async () => {
+    try {
+      const payload = { search, ...filters };
+      const response = await exportTradesApi(payload);
+      downloadFileFromResponse(response, "trades.csv");
+    } catch (err) {
+      toast.error("Failed to export trades");
+    }
   };
 
   const handleEditClick = (trade) => {

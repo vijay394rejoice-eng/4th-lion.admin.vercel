@@ -2,11 +2,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styles from "./kycRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getKYCRequests, approveKYC, rejectKYC } from "@/services/kyc";
+import { getKYCRequests, approveKYC, rejectKYC, exportKycRequestsApi } from "@/services/kyc";
 import KycPreview from "@/components/kycPreview";
 import toast from "react-hot-toast";
 import ActionHeader from "@/components/actionHeader";
-import { exportToCsv } from "@/utils/exportCsv";
+import { downloadFileFromResponse } from "@/utils/exportCsv";
 import KycActionHeader from "../kycActionHeader";
 
 const formatDate = (dateString) => {
@@ -121,8 +121,14 @@ export default function KycRequestsTable() {
     setCurrentPage(page);
   }, []);
 
-  const handleExport = () => {
-    exportToCsv(data, columns, "kyc_requests.csv");
+  const handleExport = async () => {
+    try {
+      const payload = { search, status };
+      const response = await exportKycRequestsApi(payload);
+      downloadFileFromResponse(response, "kyc_requests.csv");
+    } catch (err) {
+      toast.error("Failed to export KYC requests");
+    }
   };
 
   // Generate 10 skeleton rows when loading to align columns nicely

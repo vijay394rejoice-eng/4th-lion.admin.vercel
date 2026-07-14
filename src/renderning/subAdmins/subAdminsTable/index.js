@@ -2,8 +2,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./kycRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getSubAdmins } from "@/services/subAdmin";
-import { exportToCsv } from "@/utils/exportCsv";
+import { getSubAdmins, exportSubAdminsApi } from "@/services/subAdmin";
+import { downloadFileFromResponse } from "@/utils/exportCsv";
+import toast from "react-hot-toast";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -73,7 +74,19 @@ export default function SubAdminsTable({ email, refreshKey, exportTrigger, onEdi
   // Export to CSV when exportTrigger changes
   useEffect(() => {
     if (exportTrigger > 0) {
-      exportToCsv(data, columns, "sub_admins.csv");
+      const handleExport = async () => {
+        try {
+          const payload = {};
+          if (email) {
+            payload.email = email;
+          }
+          const response = await exportSubAdminsApi(payload);
+          downloadFileFromResponse(response, "sub_admins.csv");
+        } catch (err) {
+          toast.error("Failed to export sub-admins");
+        }
+      };
+      handleExport();
     }
   }, [exportTrigger]);
 

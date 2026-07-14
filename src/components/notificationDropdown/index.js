@@ -78,7 +78,7 @@ export default function NotificationDropdown() {
       <div className={styles.trigger} onClick={toggleDropdown}>
         <BellIcon />
         {unreadCount > 0 && (
-          <span className={styles.iconBadge} style={{ position: 'absolute', top: -5, right: -5, background: '#ec4343', color: '#fff', fontSize: '10px', width: '16px', height: '16px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span className={styles.iconBadge} style={{ position: 'absolute', top: -5, right: -10, background: '#ec4343', color: '#fff', fontSize: '10px', minWidth: '16px', height: '16px', padding: '0 4px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}

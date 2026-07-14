@@ -8,3 +8,6 @@ export const approveWithdrawRequest = (requestId) =>
 
 export const rejectWithdrawRequest = (requestId) =>
   request(() => api.post(`/admin/withdraw-requests/${requestId}/reject`));
+
+export const exportWithdrawalsApi = (params) =>
+  request(() => api.get('/admin/withdraw-requests/export', { params, responseType: 'blob' }));

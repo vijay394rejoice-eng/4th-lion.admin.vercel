@@ -18,3 +18,6 @@ export const approveDepositRequest = (requestId) =>
 
 export const rejectDepositRequest = (requestId) =>
   request(() => api.post(`/admin/deposit-transactions/${requestId}/reject`, {"remarks":"Rejected"}));
+
+export const exportDepositsApi = (params) =>
+  request(() => api.get('/admin/deposit-transactions/export', { params, responseType: 'blob' }));

@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import styles from "./withdrawRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getWithdrawRequests, approveWithdrawRequest, rejectWithdrawRequest } from "@/services/withdraw";
+import { getWithdrawRequests, approveWithdrawRequest, rejectWithdrawRequest, exportWithdrawalsApi } from "@/services/withdraw";
 import LogoutModal from "@/components/logoutModal";
 import toast from "react-hot-toast";
-import { exportToCsv } from "@/utils/exportCsv";
+import { downloadFileFromResponse } from "@/utils/exportCsv";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -145,8 +145,33 @@ const WithdrawRequestsTable = forwardRef(({ search, appliedFilters, onCountsChan
   };
 
   useImperativeHandle(ref, () => ({
-    handleExport() {
-      exportToCsv(data, columns, "withdraw_requests.csv");
+    async handleExport() {
+      try {
+        const payload = {};
+        if (search) {
+          payload.search = search;
+        }
+        if (appliedFilters?.status) {
+          payload.status = appliedFilters.status;
+        }
+        if (appliedFilters?.minAmount) {
+          payload.min_amount = Number(appliedFilters.minAmount);
+        }
+        if (appliedFilters?.maxAmount) {
+          payload.max_amount = Number(appliedFilters.maxAmount);
+        }
+        if (appliedFilters?.startDate) {
+          payload.start_date = appliedFilters.startDate;
+        }
+        if (appliedFilters?.endDate) {
+          payload.end_date = appliedFilters.endDate;
+        }
+
+        const response = await exportWithdrawalsApi(payload);
+        downloadFileFromResponse(response, "withdraw_requests.csv");
+      } catch (err) {
+        toast.error("Failed to export withdraw requests");
+      }
     }
   }));
 

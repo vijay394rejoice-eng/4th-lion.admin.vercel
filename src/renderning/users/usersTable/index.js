@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { exportToCsv } from "@/utils/exportCsv";
+import { downloadFileFromResponse } from "@/utils/exportCsv";
 import styles from "./usersTable.module.scss";
 import DataTable from "@/components/dataTable";
-import { getUsers, blockUser, unblockUser } from "@/services/user";
+import { getUsers, blockUser, unblockUser, exportUsersApi } from "@/services/user";
 import LogoutModal from "@/components/logoutModal";
 import toast from "react-hot-toast";
 
@@ -140,8 +140,27 @@ const UsersTable = forwardRef(({ search, appliedFilters }, ref) => {
   };
 
   useImperativeHandle(ref, () => ({
-    handleExport() {
-      exportToCsv(data, columns, "users.csv");
+    async handleExport() {
+      try {
+        const payload = {};
+        if (search) {
+          payload.search = search;
+        }
+        if (appliedFilters?.roles && appliedFilters.roles.length === 1) {
+          payload.role = appliedFilters.roles[0];
+        }
+        if (appliedFilters?.statuses && appliedFilters.statuses.length === 1) {
+          const status = appliedFilters.statuses[0];
+          if (status === "active" || status === "inactive") {
+            payload.is_active = status === "active";
+          }
+        }
+        
+        const response = await exportUsersApi(payload);
+        downloadFileFromResponse(response, "users.csv");
+      } catch (err) {
+        toast.error("Failed to export users");
+      }
     }
   }));
 

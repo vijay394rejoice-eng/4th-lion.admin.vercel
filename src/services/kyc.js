@@ -10,3 +10,6 @@ export const approveKYC = (requestId, payload) =>
 
 export const rejectKYC = (requestId, payload) =>
   request(() => api.post(`/admin-kyc/${requestId}/reject`, payload));
+
+export const exportKycRequestsApi = (params) =>
+  request(() => api.get('/admin-kyc/kyc-request/export', { params, responseType: 'blob' }));

@@ -8,3 +8,6 @@ export const approvePartnerRequest = (requestId) =>
 
 export const rejectPartnerRequest = (requestId) =>
   request(() => api.post(`/partner/requests/${requestId}/reject`));
+
+export const exportPartnerRequestsApi = (params) =>
+  request(() => api.get('/partner/partner-requests/export', { params, responseType: 'blob' }));
