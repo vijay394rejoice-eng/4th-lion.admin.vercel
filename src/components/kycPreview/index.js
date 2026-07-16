@@ -43,12 +43,17 @@ export default function KycPreview({ request, onClose, onApprove, onReject, isSu
         <div className={styles.kycPreview} onClick={onClose}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalheader}>
-                    <h2>
-                        {displayName}
-                    </h2>
-                    <p>
-                        {displayEmail}
-                    </p>
+                    <div>
+                        <h2>
+                            {displayName}
+                        </h2>
+                        <p>
+                            {displayEmail}
+                        </p>
+                    </div>
+                    <div className={styles.closeIcon} onClick={onClose}>
+                        <img src={`/${Close}`} alt="close" style={{ width: '24px', height: '24px' }} />
+                    </div>
                 </div>
                 <div className={styles.modalBody}>
                     <div className={styles.twoCol}>

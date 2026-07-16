@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './addNewSubAdmin.module.scss';
 import Button from '../button';
 import Input from '../input';
+import CloseIcon from '@/svg/closeIcon';
 import { createSubAdmin, updateSubAdmin, deleteSubAdmin, getSubAdminPermissions } from '@/services/subAdmin';
 import toast from 'react-hot-toast';
 import LogoutModal from '../logoutModal';
@@ -181,10 +182,13 @@ export default function AddNewSubAdmin({ onClose, onSuccess, subAdmin = null }) 
     return (
         <div className={styles.addNewSubAdmin} onClick={onClose}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                <div className={styles.modalheader}>
+                <div className={styles.modalheader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h2>
                         {isEditMode ? 'Update Sub-Admin' : 'Add New Sub-Admin'}
                     </h2>
+                    <div onClick={onClose} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                        <CloseIcon />
+                    </div>
                 </div>
                 <form onSubmit={handleSubmit} className={styles.modalBody}>
                     <div className={styles.twoCol}>

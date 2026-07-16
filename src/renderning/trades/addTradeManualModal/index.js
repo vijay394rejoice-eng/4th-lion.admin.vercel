@@ -4,6 +4,7 @@ import styles from './addTradeManualModal.module.scss';
 import CloseIcon from '@/svg/closeIcon';
 import Button from '@/components/button';
 import Input from '@/components/input';
+import MUIDateTimePicker from '@/components/muiDateTimePicker';
 import { createTradeManual } from '@/services/trades';
 import toast from 'react-hot-toast';
 import LogoutModal from '@/components/logoutModal';
@@ -14,7 +15,7 @@ const SubmitIcon = '/assets/icons/right.svg'; // Reuse right icon for add
 
 const defaultForm = {
     entry_time: '',
-    position: '',
+    position: '#',
     symbol: '',
     type: 'buy',
     volume: '',
@@ -68,7 +69,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
     const parseTrade = (form) => {
         return {
             entry_time: form.entry_time,
-            position: form.position ? parseInt(form.position) : null,
+            position: form.position ? form.position.toString() : null,
             symbol: form.symbol,
             type: form.type || null,
             volume: form.volume ? parseFloat(form.volume) : null,
@@ -225,21 +226,30 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                                 />
                                 {errors.symbol && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.symbol}</span>}
                             </div>
-                            
-                            <div className={styles.selectWrapper}>
-                                <label>Trade Type *</label>
-                                <select 
-                                    name='type'
-                                    value={formData.type}
-                                    onChange={handleChange}
-                                    disabled={isLoading}
-                                >
-                                    <option value="buy">Buy</option>
-                                    <option value="sell">Sell</option>
-                                </select>
+                            <div className={styles.typeToggle}>
+                                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#141414', fontFamily: 'var(--font-manrope)' }}>Trade Type *</label>
+                                <div style={{ display: 'flex', gap: '10px' }}>
+                                    <button 
+                                        type="button"
+                                        onClick={() => handleChange({ target: { name: 'type', value: 'buy' }})}
+                                        style={{ flex: 1, padding: '10px', borderRadius: '8px', border: formData.type === 'buy' ? '2px solid #22C55E' : '1px solid #E2E8F0', background: formData.type === 'buy' ? 'rgba(34, 197, 94, 0.1)' : '#FFF', color: formData.type === 'buy' ? '#15803D' : '#475569', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}
+                                    >
+                                        Buy
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        onClick={() => handleChange({ target: { name: 'type', value: 'sell' }})}
+                                        style={{ flex: 1, padding: '10px', borderRadius: '8px', border: formData.type === 'sell' ? '2px solid #EF4444' : '1px solid #E2E8F0', background: formData.type === 'sell' ? 'rgba(239, 68, 68, 0.1)' : '#FFF', color: formData.type === 'sell' ? '#B91C1C' : '#475569', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}
+                                    >
+                                        Sell
+                                    </button>
+                                </div>
                             </div>
                             <div>
                                 <Input 
+                                    type="number"
+                                    min="0"
+                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
                                     label='Volume *' 
                                     name='volume'
                                     placeholder='e.g. 0.05' 
@@ -252,32 +262,31 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                             </div>
 
                             <div>
-                                <Input 
-                                    label='Entry Time * (YYYY.MM.DD HH:MM:SS)' 
-                                    name='entry_time'
-                                    placeholder='e.g. 2026.06.10 14:41:06' 
+                                <MUIDateTimePicker
+                                    label="Entry Time *"
+                                    name="entry_time"
                                     value={formData.entry_time}
                                     onChange={handleChange}
                                     disabled={isLoading}
-                                    spacingRemove 
                                 />
                                 {errors.entry_time && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.entry_time}</span>}
                             </div>
                             <div>
-                                <Input 
-                                    label='Exit Time * (YYYY.MM.DD HH:MM:SS)' 
-                                    name='exit_time'
-                                    placeholder='e.g. 2026.06.08 13:46:01' 
+                                <MUIDateTimePicker
+                                    label="Exit Time *"
+                                    name="exit_time"
                                     value={formData.exit_time}
                                     onChange={handleChange}
                                     disabled={isLoading}
-                                    spacingRemove 
                                 />
                                 {errors.exit_time && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.exit_time}</span>}
                             </div>
 
                             <div>
                                 <Input 
+                                    type="number"
+                                    min="0"
+                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
                                     label='Entry Price *' 
                                     name='entry_price'
                                     placeholder='e.g. 4330.24' 
@@ -290,6 +299,9 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                             </div>
                             <div>
                                 <Input 
+                                    type="number"
+                                    min="0"
+                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
                                     label='Exit Price *' 
                                     name='exit_price'
                                     placeholder='e.g. 4357.71' 
@@ -303,6 +315,9 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
 
                             <div>
                                 <Input 
+                                    type="number"
+                                    min="0"
+                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
                                     label='Stop Loss' 
                                     name='stop_loss'
                                     placeholder='e.g. 4300.00' 
@@ -314,6 +329,9 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                             </div>
                             <div>
                                 <Input 
+                                    type="number"
+                                    min="0"
+                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
                                     label='Take Profit' 
                                     name='take_profit'
                                     placeholder='e.g. 4400.00' 

@@ -227,27 +227,49 @@ export default function TradesTable({ refreshTrigger, onUploadSuccess, onManualE
     {
       header: "Action",
       width: "14%",
-      cell: (row) => row.isSkeleton ? (
-        <div style={{ display: "flex", gap: "8px" }}>
-          <span className={`${styles.skeleton} ${styles.badge}`} style={{ width: "45px" }} />
-          <span className={`${styles.skeleton} ${styles.badge}`} style={{ width: "55px" }} />
-        </div>
-      ) : (
-        <div style={{ display: "flex", gap: "8px" }}>
-          <button 
-            className={styles.viewBtn}
-            onClick={() => handleEditClick(row)}
-          >
-            Edit
-          </button>
-          <button 
-            className={styles.blockBtn}
-            onClick={() => handleDeleteClick(row)}
-          >
-            Delete
-          </button>
-        </div>
-      )
+      cell: (row) => {
+        if (row.isSkeleton) {
+          return (
+            <div style={{ display: "flex", gap: "8px" }}>
+              <span className={`${styles.skeleton} ${styles.badge}`} style={{ width: "45px" }} />
+              <span className={`${styles.skeleton} ${styles.badge}`} style={{ width: "55px" }} />
+            </div>
+          );
+        }
+
+        if (row.is_settled) {
+          return (
+            <span style={{ 
+              backgroundColor: '#ECFDF5', 
+              color: '#059669', 
+              padding: '6px 10px', 
+              borderRadius: '6px', 
+              fontSize: '12px', 
+              fontWeight: '600',
+              display: 'inline-block'
+            }}>
+              Trade Settled
+            </span>
+          );
+        }
+
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button 
+              className={styles.viewBtn}
+              onClick={() => handleEditClick(row)}
+            >
+              Edit
+            </button>
+            <button 
+              className={styles.blockBtn}
+              onClick={() => handleDeleteClick(row)}
+            >
+              Delete
+            </button>
+          </div>
+        );
+      }
     }
   ];
 
