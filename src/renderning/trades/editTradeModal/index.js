@@ -263,6 +263,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                                     label="Exit Time *"
                                     name="exit_time"
                                     value={formData.exit_time}
+                                    min={formData.entry_time ? formData.entry_time.substring(0, 10).replace(/\./g, '-') : undefined}
                                     onChange={handleChange}
                                     disabled={isLoading}
                                 />

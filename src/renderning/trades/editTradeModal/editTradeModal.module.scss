@@ -13,13 +13,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow-y: auto;
+    // overflow-y: auto;
     padding: 20px;
 
     .modal {
         border-radius: var(--Radius-12, 12px);
         background: #FFF;
-        max-width: 650px;
+        max-width: 690px;
         width: 100%;
         box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.06), 0 8px 16px -4px rgba(20, 21, 26, 0.06);
         max-height: 90vh;
@@ -90,6 +90,7 @@
             @include respond-to("sm") {
                 grid-template-columns: 1fr;
             }
+
             border-top: 1px solid rgba(0, 0, 0, 0.10);
             background: #FAFAFA;
             border-bottom-left-radius: 12px;
@@ -102,7 +103,7 @@
 .selectWrapper {
     display: flex;
     flex-direction: column;
-    
+
     label {
         color: var(--Text-Primary, #141414);
         font-size: 14px;
@@ -110,7 +111,7 @@
         margin-bottom: 6px;
         font-family: var(--font-manrope);
     }
-    
+
     select {
         width: 100%;
         height: 38px;

@@ -41,15 +41,18 @@ export const validateTradeData = (data, requiredFields = []) => {
     }
 
     // 3. Symbol Validation
-    if (!errors.symbol) {
-        if (!trimmedData.symbol) {
-            if (requiredFields.includes('symbol')) errors.symbol = 'Symbol is required';
-        } else if (trimmedData.symbol.length > 30) {
-            errors.symbol = 'Symbol cannot exceed 30 characters';
-        } else if (!/^[a-zA-Z.]+$/.test(trimmedData.symbol)) {
-            errors.symbol = 'Invalid symbol. Please enter a valid trading symbol (e.g. XAUUSD)';
+ if (!errors.symbol) {
+    if (!trimmedData.symbol) {
+        if (requiredFields.includes('symbol')) {
+            errors.symbol = 'Symbol is required';
         }
+    } else if (trimmedData.symbol.length > 30) {
+        errors.symbol = 'Symbol cannot exceed 30 characters';
+    } else if (!/^[a-zA-Z0-9.]+$/.test(trimmedData.symbol)) {
+        errors.symbol =
+            'Invalid symbol. Only English letters, numbers, and periods (.) are allowed.';
     }
+}
 
     // 4. Volume Validation
     if (!errors.volume) {
