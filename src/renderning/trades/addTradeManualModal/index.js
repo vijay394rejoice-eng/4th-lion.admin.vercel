@@ -4,10 +4,11 @@ import styles from './addTradeManualModal.module.scss';
 import CloseIcon from '@/svg/closeIcon';
 import Button from '@/components/button';
 import Input from '@/components/input';
-import MUIDateTimePicker from '@/components/muiDateTimePicker';
+import DateTimeInput from '@/components/dateTimeInput';
 import { createTradeManual } from '@/services/trades';
 import toast from 'react-hot-toast';
 import LogoutModal from '@/components/logoutModal';
+import { validateTradeData } from '@/utils/tradeValidation';
 
 const RightIcon = '/assets/icons/right.svg';
 const Close = '/assets/icons/close.svg';
@@ -43,27 +44,25 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
             ...prev,
             [name]: value
         }));
-        if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: ''
-            }));
-        }
+        
+        // Immediate validation
+        const tempForm = { ...formData, [name]: value };
+        const { errors: newErrors } = validateTradeData(tempForm, [name]);
+        
+        setErrors(prev => ({
+            ...prev,
+            [name]: newErrors[name] || ''
+        }));
     };
 
     const validate = () => {
-        const newErrors = {};
-        if (!formData.entry_time) newErrors.entry_time = 'Entry time is required';
-        if (!formData.position) newErrors.position = 'Position ID is required';
-        if (!formData.symbol) newErrors.symbol = 'Symbol is required';
-        if (!formData.volume) newErrors.volume = 'Volume is required';
-        if (!formData.entry_price) newErrors.entry_price = 'Entry price is required';
-        if (!formData.exit_time) newErrors.exit_time = 'Exit time is required';
-        if (!formData.exit_price) newErrors.exit_price = 'Exit price is required';
-        if (!formData.profit) newErrors.profit = 'Profit is required';
+        const required = ['entry_time', 'position', 'symbol', 'volume', 'entry_price', 'exit_time', 'exit_price', 'profit'];
+        const { errors: newErrors, trimmedData } = validateTradeData(formData, required);
         
+        // Update form data to trimmed version
+        setFormData(trimmedData);
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        return Object.keys(newErrors).length === 0 ? trimmedData : false;
     };
 
     const parseTrade = (form) => {
@@ -87,11 +86,12 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
     };
 
     const handleAddDraft = () => {
-        if (!validate()) {
-            toast.error("Please fill all required fields to add the trade");
+        const validatedData = validate();
+        if (!validatedData) {
+            toast.error("Please fix the validation errors");
             return;
         }
-        const newTrade = parseTrade(formData);
+        const newTrade = parseTrade(validatedData);
         setDraftTrades(prev => [...prev, newTrade]);
         // Reset form
         setFormData({ ...defaultForm });
@@ -117,11 +117,12 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
         });
 
         if (hasFormValues || finalPayload.length === 0) {
-            if (!validate()) {
+            const validatedData = validate();
+            if (!validatedData) {
                 toast.error("Please complete the current trade form or clear it before saving");
                 return;
             }
-            const currentTrade = parseTrade(formData);
+            const currentTrade = parseTrade(validatedData);
             finalPayload.push(currentTrade);
         }
 
@@ -161,8 +162,8 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
     };
 
     return (
-        <div className={styles.addTradeManualModal} onClick={handleAttemptClose}>
-            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.addTradeManualModal}>
+            <div className={styles.modal}>
                 <div className={styles.modalheader}>
                     <div>
                         <h2>Add Trade Details (Multiple)</h2>
@@ -222,6 +223,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                                     value={formData.symbol}
                                     onChange={handleChange}
                                     disabled={isLoading}
+                                    maxLength={30}
                                     spacingRemove 
                                 />
                                 {errors.symbol && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.symbol}</span>}
@@ -247,9 +249,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                             </div>
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Volume *' 
                                     name='volume'
                                     placeholder='e.g. 0.05' 
@@ -262,7 +262,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                             </div>
 
                             <div>
-                                <MUIDateTimePicker
+                                <DateTimeInput
                                     label="Entry Time *"
                                     name="entry_time"
                                     value={formData.entry_time}
@@ -272,7 +272,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                                 {errors.entry_time && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.entry_time}</span>}
                             </div>
                             <div>
-                                <MUIDateTimePicker
+                                <DateTimeInput
                                     label="Exit Time *"
                                     name="exit_time"
                                     value={formData.exit_time}
@@ -284,9 +284,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
 
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Entry Price *' 
                                     name='entry_price'
                                     placeholder='e.g. 4330.24' 
@@ -299,9 +297,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                             </div>
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Exit Price *' 
                                     name='exit_price'
                                     placeholder='e.g. 4357.71' 
@@ -315,9 +311,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
 
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Stop Loss' 
                                     name='stop_loss'
                                     placeholder='e.g. 4300.00' 
@@ -326,12 +320,11 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.stop_loss && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.stop_loss}</span>}
                             </div>
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Take Profit' 
                                     name='take_profit'
                                     placeholder='e.g. 4400.00' 
@@ -340,6 +333,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.take_profit && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.take_profit}</span>}
                             </div>
 
                             <div>
@@ -352,6 +346,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.commission && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.commission}</span>}
                             </div>
                             <div>
                                 <Input 
@@ -363,6 +358,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.swap && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.swap}</span>}
                             </div>
 
                             <div>
@@ -387,6 +383,7 @@ export default function AddTradeManualModal({ onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.profit_percent && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.profit_percent}</span>}
                             </div>
                         </div>
                     </form>

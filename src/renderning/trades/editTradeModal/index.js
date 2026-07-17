@@ -4,9 +4,10 @@ import styles from './editTradeModal.module.scss';
 import CloseIcon from '@/svg/closeIcon';
 import Button from '@/components/button';
 import Input from '@/components/input';
-import MUIDateTimePicker from '@/components/muiDateTimePicker';
+import DateTimeInput from '@/components/dateTimeInput';
 import { updateTrade } from '@/services/trades';
 import toast from 'react-hot-toast';
+import { validateTradeData } from '@/utils/tradeValidation';
 
 const SaveIcon = '/assets/icons/right.svg';
 const CloseIconPath = '/assets/icons/close.svg';
@@ -58,51 +59,49 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
             ...prev,
             [name]: value
         }));
-        if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: ''
-            }));
-        }
+        
+        // Immediate validation
+        const tempForm = { ...formData, [name]: value };
+        const { errors: newErrors } = validateTradeData(tempForm, [name]);
+        
+        setErrors(prev => ({
+            ...prev,
+            [name]: newErrors[name] || ''
+        }));
     };
 
     const validate = () => {
-        const newErrors = {};
-        if (!formData.entry_time) newErrors.entry_time = 'Entry time is required';
-        if (!formData.position) newErrors.position = 'Position ID is required';
-        if (!formData.symbol) newErrors.symbol = 'Symbol is required';
-        if (!formData.volume) newErrors.volume = 'Volume is required';
-        if (!formData.entry_price) newErrors.entry_price = 'Entry price is required';
-        if (!formData.exit_time) newErrors.exit_time = 'Exit time is required';
-        if (!formData.exit_price) newErrors.exit_price = 'Exit price is required';
-        if (!formData.profit) newErrors.profit = 'Profit is required';
+        const required = ['entry_time', 'position', 'symbol', 'volume', 'entry_price', 'exit_time', 'exit_price', 'profit'];
+        const { errors: newErrors, trimmedData } = validateTradeData(formData, required);
         
+        setFormData(trimmedData);
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        return Object.keys(newErrors).length === 0 ? trimmedData : false;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validate()) {
-            toast.error("Please fill all required fields");
+        const validatedData = validate();
+        if (!validatedData) {
+            toast.error("Please fix the validation errors");
             return;
         }
 
         const payload = {
-            entry_time: formData.entry_time,
-            position: formData.position ? formData.position.toString() : null,
-            symbol: formData.symbol,
-            trade_type: formData.trade_type || null,
-            volume: formData.volume ? parseFloat(formData.volume) : null,
-            entry_price: formData.entry_price ? parseFloat(formData.entry_price) : null,
-            stop_loss: formData.stop_loss ? parseFloat(formData.stop_loss) : null,
-            take_profit: formData.take_profit ? parseFloat(formData.take_profit) : null,
-            exit_time: formData.exit_time,
-            exit_price: formData.exit_price ? parseFloat(formData.exit_price) : null,
-            commission: formData.commission ? parseFloat(formData.commission) : 0,
-            swap: formData.swap ? parseFloat(formData.swap) : 0,
-            profit: formData.profit ? parseFloat(formData.profit) : null,
-            profit_percent: formData.profit_percent ? parseFloat(formData.profit_percent) : null
+            entry_time: validatedData.entry_time,
+            position: validatedData.position ? validatedData.position.toString() : null,
+            symbol: validatedData.symbol,
+            trade_type: validatedData.trade_type || null,
+            volume: validatedData.volume ? parseFloat(validatedData.volume) : null,
+            entry_price: validatedData.entry_price ? parseFloat(validatedData.entry_price) : null,
+            stop_loss: validatedData.stop_loss ? parseFloat(validatedData.stop_loss) : null,
+            take_profit: validatedData.take_profit ? parseFloat(validatedData.take_profit) : null,
+            exit_time: validatedData.exit_time,
+            exit_price: validatedData.exit_price ? parseFloat(validatedData.exit_price) : null,
+            commission: validatedData.commission ? parseFloat(validatedData.commission) : 0,
+            swap: validatedData.swap ? parseFloat(validatedData.swap) : 0,
+            profit: validatedData.profit ? parseFloat(validatedData.profit) : null,
+            profit_percent: validatedData.profit_percent ? parseFloat(validatedData.profit_percent) : null
         };
 
         setIsLoading(true);
@@ -124,8 +123,8 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
     };
 
     return (
-        <div className={styles.editTradeModal} onClick={onClose}>
-            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.editTradeModal}>
+            <div className={styles.modal}>
                 <div className={styles.modalheader}>
                     <div>
                         <h2>Edit Trade Details</h2>
@@ -158,6 +157,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                                     value={formData.symbol}
                                     onChange={handleChange}
                                     disabled={isLoading}
+                                    maxLength={30}
                                     spacingRemove 
                                 />
                                 {errors.symbol && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.symbol}</span>}
@@ -185,9 +185,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
 
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Volume *' 
                                     name='volume'
                                     placeholder='e.g. 0.05' 
@@ -200,9 +198,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                             </div>
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Entry Price *' 
                                     name='entry_price'
                                     placeholder='e.g. 4330.24' 
@@ -215,9 +211,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                             </div>
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Exit Price *' 
                                     name='exit_price'
                                     placeholder='e.g. 4357.71' 
@@ -230,9 +224,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                             </div>
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Stop Loss' 
                                     name='stop_loss'
                                     placeholder='e.g. 4300.00' 
@@ -241,12 +233,11 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.stop_loss && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.stop_loss}</span>}
                             </div>
                             <div>
                                 <Input 
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                                    type="text"
                                     label='Take Profit' 
                                     name='take_profit'
                                     placeholder='e.g. 4400.00' 
@@ -255,9 +246,10 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.take_profit && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.take_profit}</span>}
                             </div>
                             <div>
-                                <MUIDateTimePicker
+                                <DateTimeInput
                                     label="Entry Time *"
                                     name="entry_time"
                                     value={formData.entry_time}
@@ -267,7 +259,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                                 {errors.entry_time && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.entry_time}</span>}
                             </div>
                             <div>
-                                <MUIDateTimePicker
+                                <DateTimeInput
                                     label="Exit Time *"
                                     name="exit_time"
                                     value={formData.exit_time}
@@ -286,6 +278,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.commission && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.commission}</span>}
                             </div>
                             <div>
                                 <Input 
@@ -297,6 +290,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.swap && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.swap}</span>}
                             </div>
                             <div>
                                 <Input 
@@ -320,6 +314,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                                     disabled={isLoading}
                                     spacingRemove 
                                 />
+                                {errors.profit_percent && <span style={{ color: '#EF4444', fontSize: '11px', display: 'block', marginTop: '4px' }}>{errors.profit_percent}</span>}
                             </div>
                         </div>
                     </form>
@@ -327,7 +322,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                 
                 <div className={styles.buttonGrid}>
                     <Button 
-                        icon={SaveIcon} 
+                        // icon={SaveIcon} 
                         text={isLoading ? "Saving..." : "Save"} 
                         onClick={handleSubmit}
                         disabled={isLoading}
@@ -335,7 +330,7 @@ export default function EditTradeModal({ trade, onClose, onSuccess }) {
                         form="edit-trade-form"
                     />
                     <Button 
-                        icon={CloseIconPath} 
+                        // icon={CloseIconPath} 
                         text="Cancel" 
                         primaryOutline 
                         onClick={onClose}

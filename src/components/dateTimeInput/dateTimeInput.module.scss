@@ -1,0 +1,48 @@
+.dateTimeInput {
+    width: 100%;
+
+    .label {
+        color: var(--Text-Primary, #141414);
+        font-size: 14px;
+        font-weight: 600;
+        line-height: normal;
+        display: block;
+        padding: 0 0 8px 0;
+    }
+
+    .row {
+        display: flex;
+        gap: 8px;
+    }
+
+    .field {
+        flex: 1;
+        height: 48px;
+        border-radius: var(--Radius-8, 8px);
+        padding: 0 12px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        background: rgba(0, 0, 0, 0.04);
+        color: var(--Text-Primary, #141414);
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        transition: border 0.3s ease-in-out;
+        min-width: 0;
+
+        // Remove default browser chrome on date/time inputs
+        &::-webkit-calendar-picker-indicator {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        &:focus {
+            outline: none;
+            border: 1px solid #141414;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+}

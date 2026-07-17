@@ -3,6 +3,7 @@
 
 .tableContainer {
     width: 100%;
+    overflow-x: auto;
 
     :global(th) {
         padding-left: 12px !important;
@@ -55,6 +56,7 @@
     display: flex;
     gap: 8px;
     align-items: center;
+    min-width: 160px;
 }
 
 .approveBtn {

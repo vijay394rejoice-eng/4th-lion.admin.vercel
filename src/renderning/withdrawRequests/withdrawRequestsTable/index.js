@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } f
 import styles from "./withdrawRequestsTable.module.scss";
 import DataTable from "@/components/dataTable";
 import { getWithdrawRequests, approveWithdrawRequest, rejectWithdrawRequest, exportWithdrawalsApi } from "@/services/withdraw";
-import LogoutModal from "@/components/logoutModal";
+import WithdrawActionModal from "@/components/withdrawActionModal";
 import toast from "react-hot-toast";
 import { downloadFileFromResponse } from "@/utils/exportCsv";
 
@@ -112,15 +112,20 @@ const WithdrawRequestsTable = forwardRef(({ search, appliedFilters, onCountsChan
     setConfirmType(type);
   };
 
-  const handleConfirmAction = async () => {
+  const handleConfirmAction = async (data) => {
     if (!selectedRequest || !confirmType) return;
     setIsSubmitting(true);
+    
+    const formData = new FormData();
+    formData.append("remarks", data.remarks);
+    formData.append("transaction_receipt", data.receipt);
+
     try {
       let res;
       if (confirmType === "approve") {
-        res = await approveWithdrawRequest(selectedRequest.id);
+        res = await approveWithdrawRequest(selectedRequest.id, formData);
       } else {
-        res = await rejectWithdrawRequest(selectedRequest.id);
+        res = await rejectWithdrawRequest(selectedRequest.id, formData);
       }
 
       if (res && res.status === 1) {
@@ -301,7 +306,7 @@ const WithdrawRequestsTable = forwardRef(({ search, appliedFilters, onCountsChan
     },
     {
       header: "Action",
-      width: "8%",
+      width: "12%",
       cell: (row) =>
         row.isSkeleton ? (
           <span className={`${styles.skeleton} ${styles.badge}`} />
@@ -343,17 +348,11 @@ const WithdrawRequestsTable = forwardRef(({ search, appliedFilters, onCountsChan
       </div>
 
       {confirmType && selectedRequest && (
-        <LogoutModal
-          message={
-            confirmType === "approve"
-              ? `Are you sure you want to approve the withdraw request of ${selectedRequest.amount}?`
-              : `Are you sure you want to reject the withdraw request of ${selectedRequest.amount}?`
-          }
-          confirmText={confirmType === "approve" ? "Approve" : "Reject"}
-          confirmIcon={confirmType === "approve" ? "/assets/icons/right.svg" : "/assets/icons/close.svg"}
-          danger={confirmType === "reject"}
+        <WithdrawActionModal
+          actionType={confirmType}
+          amount={selectedRequest.amount}
           onConfirm={handleConfirmAction}
-          onCancel={handleCancelAction}
+          onClose={handleCancelAction}
           isSubmitting={isSubmitting}
         />
       )}
